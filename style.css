@@ -93,7 +93,7 @@ body {
 }
 
 .hero {
-    background: var(--primary-light) url('/assets/disaster.jpeg') center center/cover no-repeat;
+    background: var(--primary-light) url('assets/disaster.jpeg') center center/cover no-repeat;
     position: relative;
     padding: 3.5rem 0 2.5rem 0;
     height: 80vh;
