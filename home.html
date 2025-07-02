@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReliefNet</title>
+    <link rel="stylesheet" href="home.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-flex">
+            <div class="logo">ReliefNet</div>
+            
+            <!-- Add nav with login button -->
+            <nav class="nav" id="navMenu">
+                <a href="#logout" class="btn btn-primary" id="logoutBtn">Logout</a>
+            </nav>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+   <h1>Coming Soon</h1>
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-flex">
+            <div>
+                &copy; 2025 ReliefNet. All rights reserved.
+            </div>
+            <div class="footer-social">
+                <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating How It Works Button -->
+    <button id="howItWorksBtn" class="howitworks-icon" aria-label="How It Works">
+        <i class="fa fa-question"></i>
+    </button>
+
+    <!-- How It Works Popup Modal -->
+    <div id="HowItWorks" class="howitworks">
+        <div class="howitworks-content">
+            <span class="howitworks-close" id="howItWorksClose">&times;</span>
+            <h2>How It Works</h2>
+            <ol>
+                <li> <strong>Report Needs:</strong> Community members or volunteers submit urgent needs with photos, videos, and location details.</li>
+                <li><strong>Community Validation:</strong> Other users upvote or confirm the need, helping prioritize the most critical cases.</li>
+                <li> <strong>Resource & Volunteer Matching:</strong> ReliefNet matches available resources and volunteers to the highest priority needs using smart algorithms.</li>
+                <li> <strong>Track & Coordinate:</strong> All actions are tracked transparently, and updates are shared in real-time with all stakeholders.</li>
+                <li> <strong>Recognition:</strong> Volunteers and contributors earn badges for their efforts, encouraging ongoing participation.</li>
+            </ol>
+            <div style="margin-top:1.2rem; color:#2b8a78; font-weight:500;">
+                ReliefNet ensures no need goes unnoticed and every helping hand is utilized efficiently.
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="firebase-init.js"></script>
+    <script src="home.js"></script>
+    <script>
+        // Logout button logic for home.html
+        document.addEventListener('DOMContentLoaded', function() {
+            var logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    firebase.auth().signOut().then(function() {
+                        window.location.href = "index.html";
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

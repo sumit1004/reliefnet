@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReliefNet</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-flex">
+            <div class="logo">ReliefNet</div>
+            
+            <!-- Add nav with login button -->
+            <nav class="nav" id="navMenu">
+                
+                <a href="#login" class="btn btn-primary" id="loginBtn">Login</a>
+            </nav>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-flex">
+            <div class="hero-content">
+                <h1>Empowering rural communities through real-time disaster relief coordination.</h1>
+                <p>ReliefNet connects volunteers, NGOs, and communities to ensure timely, transparent, and effective disaster response in rural India.</p>
+                <a href="#features" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <h2>Why ReliefNet?</h2>
+            <p>Rural disaster relief often faces duplication of efforts, delays in aid, and underutilized volunteers. ReliefNet streamlines coordination, ensuring help reaches where it's needed most, fast.</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📷</span>
+                    <h3>Need Reporting</h3>
+                    <p>Report needs with photos/videos for clarity and transparency.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔗</span>
+                    <h3>Resource Sharing</h3>
+                    <p>Share and track resources in real-time to avoid duplication.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">👍</span>
+                    <h3>Community Voting</h3>
+                    <p>Prioritize needs through transparent community voting.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🤝</span>
+                    <h3>Volunteer Matching</h3>
+                    <p>Smartly match volunteers to tasks based on skills and location.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📶</span>
+                    <h3>Offline Support</h3>
+                    <p>Works even with limited connectivity; syncs when online.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🏅</span>
+                    <h3>Gamification</h3>
+                    <p>Earn badges and recognition for your contributions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About ReliefNet</h2>
+            <p><strong>Our Mission:</strong> To empower rural communities with technology for faster, fairer disaster relief.</p>
+            <p>Born from the need for better coordination, ReliefNet brings together NGOs, volunteers, and local leaders. We believe in partnerships and open collaboration for maximum impact.</p>
+            <p class="partnerships">Potential partners: NGOs, local governments, tech innovators.</p>
+        </div>
+    </section>
+
+
+    <section class="join" id="volunteers">
+        <div class="container join-flex">
+            <div>
+                <h2>Join the Movement</h2>
+                <p>Are you an NGO or a volunteer? Join ReliefNet and make a difference in rural disaster response.</p>
+            </div>
+            <div class="join-buttons">
+                <a href="#contact" class="btn btn-secondary">Join as NGO</a>
+                <a href="#contact" class="btn btn-primary">Become a Volunteer</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Email: <a href="mailto:contact@reliefnet.org">contact@reliefnet.org</a> | Phone: <a href="tel:+919999999999">+91 99999 99999</a></p>
+            <div class="placeholder">
+                <p><em>Future integration: Dashboard, reporting form, and analytics coming soon.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-flex">
+            <div>
+                &copy; 2025 ReliefNet. All rights reserved.
+            </div>
+            <div class="footer-social">
+                <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating How It Works Button -->
+    <button id="howItWorksBtn" class="howitworks-icon" aria-label="How It Works">
+        <i class="fa fa-question"></i>
+    </button>
+
+    <!-- How It Works Popup Modal -->
+    <div id="HowItWorks" class="howitworks">
+        <div class="howitworks-content">
+            <span class="howitworks-close" id="howItWorksClose">&times;</span>
+            <h2>How It Works</h2>
+            <ol>
+                <li> <strong>Report Needs:</strong> Community members or volunteers submit urgent needs with photos, videos, and location details.</li>
+                <li><strong>Community Validation:</strong> Other users upvote or confirm the need, helping prioritize the most critical cases.</li>
+                <li> <strong>Resource & Volunteer Matching:</strong> ReliefNet matches available resources and volunteers to the highest priority needs using smart algorithms.</li>
+                <li> <strong>Track & Coordinate:</strong> All actions are tracked transparently, and updates are shared in real-time with all stakeholders.</li>
+                <li> <strong>Recognition:</strong> Volunteers and contributors earn badges for their efforts, encouraging ongoing participation.</li>
+            </ol>
+            <div class="bottom-note">
+                ReliefNet ensures no need goes unnoticed and every helping hand is utilized efficiently.
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="howitworks">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="loginClose">&times;</span>
+            <h2 class="login-title">Login</h2>
+            <div class="login-icons-row">
+                <button type="button" id="googleSignInBtn" class="btn btn-icon google-signin-btn" title="Sign in with Google">
+                    <i class="fa fa-google"></i>
+                </button>
+                <button type="button" id="showMobileLoginBtn" class="btn btn-icon mobile-signin-btn" title="Login with Mobile">
+                    <i class="fa fa-mobile"></i>
+                </button>
+            </div>
+            <form id="loginForm" class="login-form">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required>
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required>
+                <button type="submit" class="btn btn-primary login-submit-btn">Login</button>
+                <div id="loginError" class="login-error"></div>
+            </form>
+            <div id="loginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showSignup">Don't have an account? Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Login Modal -->
+    <div id="mobileLoginModal" class="howitworks">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="mobileLoginClose">&times;</span>
+            <h2 class="login-title">Mobile Login</h2>
+            <form id="mobileLoginForm" class="login-form">
+                <label for="loginMobile">Mobile Number</label>
+                <input type="tel" id="loginMobile" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit Mobile Number" required>
+                <div id="recaptcha-container" style="margin: 0.5rem 0;"></div>
+                <button type="button" class="btn btn-secondary login-mobile-btn" id="loginWithMobileBtn">Send OTP</button>
+                <div id="otpSection" style="display:none;">
+                    <label for="loginOtp">Enter OTP</label>
+                    <input type="text" id="loginOtp" maxlength="6" placeholder="Enter OTP">
+                    <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
+                </div>
+                <div id="mobileLoginError" class="login-error"></div>
+            </form>
+            <div id="mobileLoginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showEmailLogin">Login with Email/Password</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="howitworks">
+        <div class="howitworks-content signup-modal-content signup-modal-scroll">
+            <span class="howitworks-close" id="signupClose">&times;</span>
+            <h2 class="signup-title">Sign Up</h2>
+            <div class="signup-form-scroll-wrapper">
+                <form id="signupForm" class="signup-form">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required>
+
+                    <label for="signupAadhar">Aadhar Number</label>
+                    <input type="text" id="signupAadhar" maxlength="12" pattern="\d{12}" required placeholder="12-digit Aadhar Number">
+
+                    <label for="signupMobile">Mobile Number</label>
+                    <input type="tel" id="signupMobile" maxlength="10" pattern="[0-9]{10}" required placeholder="10-digit Mobile Number">
+
+                    <label for="signupAddress">Address</label>
+                    <textarea id="signupAddress" rows="2" required placeholder="Full Address"></textarea>
+
+                    <label for="signupDOB">Date of Birth</label>
+                    <input type="date" id="signupDOB" required>
+
+                    <label for="signupGender">Gender</label>
+                    <select id="signupGender" required>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary signup-submit-btn">Sign Up</button>
+                    <div id="signupError" class="signup-error"></div>
+                </form>
+            </div>
+            <div id="signupSuccess" class="signup-success">Signup successful! You can now log in.</div>
+            <div class="signup-bottom-link">
+                <a href="#" id="showLogin">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="firebase-init.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
