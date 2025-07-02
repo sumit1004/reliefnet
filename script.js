@@ -214,6 +214,7 @@ if (loginForm) {
                 setTimeout(() => {
                     if (loginModal) loginModal.classList.remove('active');
                     if (loginSuccess) loginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; // Immediate redirect after login
                 }, 1200);
             })
             .catch(err => {
@@ -235,6 +236,7 @@ if (googleSignInBtn) {
                 setTimeout(() => {
                     if (loginModal) loginModal.classList.remove('active');
                     if (loginSuccess) loginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; // Immediate redirect after login
                 }, 1200);
             })
             .catch(err => {
@@ -259,7 +261,7 @@ function setAuthButton(user) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             firebase.auth().signOut().then(() => {
-                window.location.href = "index.html";
+                window.location.href = "index.html"; // Redirect to index.html after logout
             });
         });
         navMenu.appendChild(logoutBtn);
@@ -270,10 +272,21 @@ function setAuthButton(user) {
     }
 }
 
+// --- Auth State & Page Access Control ---
 firebase.auth().onAuthStateChanged(function(user) {
     setAuthButton(user);
-    if (user && window.location.pathname.endsWith("index.html")) {
-        window.location.href = "home.html";
+    const isIndex = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/") || window.location.pathname === "/index.html";
+    const isHome = window.location.pathname.endsWith("home.html");
+    if (user) {
+        // If logged in and on index, redirect to home
+        if (isIndex) {
+            window.location.href = "home.html";
+        }
+    } else {
+        // If not logged in and on home, redirect to index
+        if (isHome) {
+            window.location.href = "index.html";
+        }
     }
 });
 
@@ -390,6 +403,7 @@ if (verifyOtpBtn && loginOtpInput) {
                 setTimeout(() => {
                     if (mobileLoginModal) mobileLoginModal.classList.remove('active');
                     if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; // Immediate redirect after login
                 }, 1200);
             })
             .catch(function(error) {
