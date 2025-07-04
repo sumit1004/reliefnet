@@ -236,7 +236,7 @@ if (googleSignInBtn) {
                 setTimeout(() => {
                     if (loginModal) loginModal.classList.remove('active');
                     if (loginSuccess) loginSuccess.style.display = 'none';
-                    window.location.href = "home.html"; // Immediate redirect after login
+                    window.location.href = "home.html"; 
                 }, 1200);
             })
             .catch(err => {
