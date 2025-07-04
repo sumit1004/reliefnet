@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
 </head>
 <body>
     <!-- Header -->
@@ -16,7 +18,7 @@
             
             <!-- Add nav with login button -->
             <nav class="nav" id="navMenu">
-                
+                <!-- Replace old login button with new trigger -->
                 <a href="#login" class="btn btn-primary" id="loginBtn">Login</a>
             </nav>
             
@@ -256,11 +258,145 @@
         </div>
     </div>
 
+    <!-- Add Login Role Selection Popup Modal -->
+    <div id="loginRoleModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content login-modal-content" style="max-width: 350px;">
+            <span class="howitworks-close" id="loginRoleClose" style="top: 10px; right: 16px;">&times;</span>
+            <h2 class="login-title" style="margin-bottom: 1.5rem;">Login as</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button type="button" class="btn btn-primary" id="victimLoginBtn">Victim Login</button>
+                <button type="button" class="btn btn-secondary" id="volunteerLoginBtn">Volunteer Login</button>
+                <button type="button" class="btn btn-secondary" id="ngoLoginBtn">NGO Login</button>
+                <button type="button" class="btn btn-secondary" id="adminLoginBtn">Admin Login</button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-init.js"></script>
     <script src="script.js"></script>
+    <script>
+    // --- Login Role Modal Logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginBtn = document.getElementById('loginBtn');
+        const loginRoleModal = document.getElementById('loginRoleModal');
+        const loginRoleClose = document.getElementById('loginRoleClose');
+        const victimLoginBtn = document.getElementById('victimLoginBtn');
+        const loginModal = document.getElementById('loginModal');
+
+        // Hide old login modal on page load
+        if (loginModal) {
+            loginModal.classList.remove('active');
+        }
+
+        if (loginBtn && loginRoleModal) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Always hide old login modal before showing role modal
+                if (loginModal) loginModal.classList.remove('active');
+                loginRoleModal.style.display = 'block';
+            });
+        }
+        if (loginRoleClose && loginRoleModal) {
+            loginRoleClose.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+            });
+        }
+        // Close modal on outside click
+        if (loginRoleModal) {
+            loginRoleModal.addEventListener('click', function(e) {
+                if (e.target === loginRoleModal) {
+                    loginRoleModal.style.display = 'none';
+                }
+            });
+        }
+        // Victim Login opens the old login modal
+        if (victimLoginBtn && loginModal && loginRoleModal) {
+            victimLoginBtn.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+                loginModal.classList.add('active');
+            });
+        }
+        // Optionally, add logic for other roles here later
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle logic
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('open');
+            if (navMenu.classList.contains('open')) {
+                document.body.classList.add('nav-open');
+            } else {
+                document.body.classList.remove('nav-open');
+            }
+        });
+        // Close sidebar on outside click (mobile)
+        document.addEventListener('click', function(e) {
+            if (
+                navMenu.classList.contains('open') &&
+                !navMenu.contains(e.target) &&
+                e.target !== menuToggle &&
+                !menuToggle.contains(e.target)
+            ) {
+                navMenu.classList.remove('open');
+                document.body.classList.remove('nav-open');
+            }
+        });
+        // Optional: close sidebar on navigation link click (mobile)
+        navMenu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 900) {
+                    navMenu.classList.remove('open');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+        });
+    });
+
+    // --- Fix: Mobile menu toggle logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        var menuToggle = document.getElementById('menuToggle');
+        var navMenu = document.getElementById('navMenu');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navMenu.classList.toggle('open');
+                if (navMenu.classList.contains('open')) {
+                    document.body.classList.add('nav-open');
+                } else {
+                    document.body.classList.remove('nav-open');
+                }
+            });
+
+            // Close sidebar on outside click (mobile)
+            document.addEventListener('click', function(e) {
+                if (
+                    navMenu.classList.contains('open') &&
+                    !navMenu.contains(e.target) &&
+                    e.target !== menuToggle &&
+                    !menuToggle.contains(e.target)
+                ) {
+                    navMenu.classList.remove('open');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+
+            // Optional: close sidebar on navigation link click (mobile)
+            navMenu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 900) {
+                        navMenu.classList.remove('open');
+                        document.body.classList.remove('nav-open');
+                    }
+                });
+            });
+        }
+    });
+    </script>
 </body>
 </html>

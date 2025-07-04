@@ -1,0 +1,11 @@
+[
+  {
+    "origin": [
+      "http://127.0.0.1:5500",
+      "https://mywebsite.com"
+    ],
+    "method": ["GET", "POST", "HEAD"],
+    "responseHeader": ["Content-Type", "Authorization"],
+    "maxAgeSeconds": 3600
+  }
+]
