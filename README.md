@@ -69,3 +69,41 @@ We also created a basic UI for the volunteer dashboard, where volunteers can vie
 This initial design sets the foundation for further enhancements, including task assignment, resource tracking, and detailed volunteer management.
 
 
+Checkpoint 6: Volunteer Dashboard Features (Completed)
+In this checkpoint, we completed and connected the full Volunteer Dashboard with Firebase Realtime Database and storage integration.
+
+The dashboard now includes the following features:
+
+A personalized welcome message to motivate volunteers:
+"Welcome, Volunteer! Empower your community. Track your impact. Take action now."
+
+My Team Section:
+Volunteers can see their team name, team lead, region, and list of all team members. This makes it easier to understand who they are working with.
+
+Update Available Resources Section:
+Volunteers can submit the type of resources they have (for example, water or food), the quantity, and their location. This information is stored in the Realtime Database and updates are shown instantly.
+
+Available Resources List:
+Volunteers can view all resources already added, including type, quantity, location, and when they were added. This helps track supplies and plan distribution.
+
+Assigned Tasks Section:
+This section will display tasks assigned to the volunteer. Currently, no tasks are assigned.
+
+Upcoming Tasks & Alerts Section:
+Volunteers can read today’s important updates and plans. For example, "Focus on food distribution and medical support in affected villages," along with scheduled activities like checking water supply and team briefings.
+
+Assigned Locations Map:
+A placeholder map area is included, which will show assigned locations and nearby relief points.
+
+Request Additional Resources Section:
+Volunteers can request more resources by specifying the type, quantity, and a short message explaining why they need it. This request is saved in the database for admin review.
+
+Performance Tracker:
+Volunteers can see how many tasks they have completed, how many people they have helped, and view badges or achievements. Currently, both tasks completed and people helped are at zero.
+
+Upload Proof of Task Completion:
+Volunteers can upload images or files as proof after finishing a task. This adds transparency and helps with accountability.
+
+All of these features are now integrated with Firebase Realtime Database and storage, so data is saved securely and updates happen in real-time.
+
+This checkpoint makes the Volunteer Dashboard fully functional and ready for practical use, allowing volunteers to manage their activities, track resources, stay updated with alerts, and actively participate in the relief operations.
