@@ -268,6 +268,8 @@ if (signupModal) {
             signupSuccess.style.display = 'none';
         }
     });
+
+
 }
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -276,6 +278,67 @@ document.addEventListener('keydown', (e) => {
         if (signupSuccess) signupSuccess.style.display = 'none';
     }
 });
+
+// --- Firebase Signup ---
+if (signupForm) {
+    signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        signupError.textContent = '';
+        signupSuccess.style.display = 'none';
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const aadhar = document.getElementById('signupAadhar').value;
+        const mobile = document.getElementById('signupMobile').value;
+        const address = document.getElementById('signupAddress').value;
+        const name = document.getElementById('signupName').value;
+        const dob = document.getElementById('signupDOB').value;
+        const gender = document.getElementById('signupGender').value;
+
+        if (!/^\d{12}$/.test(aadhar)) {
+            signupError.textContent = "Please enter a valid 12-digit Aadhar number.";
+            return;
+        }
+        if (!/^\d{10}$/.test(mobile)) {
+            signupError.textContent = "Please enter a valid 10-digit mobile number.";
+            return;
+        }
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const userId = userCredential.user.uid;
+                const userProfile = {
+                    email,
+                    aadhar,
+                    mobile,
+                    address,
+                    name,
+                    dob,
+                    gender
+                };
+                // Store in Realtime Database
+                const dbPromise = firebase.database().ref('users/' + userId).set(userProfile);
+                // Store in Firebase Storage as JSON
+                const storageRef = firebase.storage().ref('user_profiles/' + userId + '.json');
+                const blob = new Blob([JSON.stringify(userProfile)], { type: 'application/json' });
+                const storagePromise = storageRef.put(blob);
+                return Promise.all([dbPromise, storagePromise]);
+            })
+            .then(() => {
+                signupSuccess.style.display = 'block';
+                setTimeout(() => {
+                    signupModal.classList.remove('active');
+                    signupSuccess.style.display = 'none';
+                    loginModal.classList.add('active');
+                }, 1200);
+            })
+            .catch(err => {
+                signupError.textContent = err.message.replace('Firebase:', '');
+            });
+    });
+}
+
+
+
 
 // --- Login Modal Logic ---
 if (loginBtn) {
@@ -310,3 +373,215 @@ document.addEventListener('keydown', (e) => {
         if (loginSuccess) loginSuccess.style.display = 'none';
     }
 });
+
+// --- Firebase Login ---
+if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (loginError) loginError.textContent = '';
+        if (loginSuccess) loginSuccess.style.display = 'none';
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                if (loginSuccess) loginSuccess.style.display = 'block';
+                setTimeout(() => {
+                    if (loginModal) loginModal.classList.remove('active');
+                    if (loginSuccess) loginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; // open after login
+                }, 1200);
+            })
+            .catch(err => {
+                if (loginError) loginError.textContent = err.message.replace('Firebase:', '');
+            });
+    });
+}
+
+// --- Google Sign-In ---
+const googleSignInBtn = document.getElementById('googleSignInBtn');
+if (googleSignInBtn) {
+    googleSignInBtn.addEventListener('click', function() {
+        if (loginError) loginError.textContent = '';
+        if (loginSuccess) loginSuccess.style.display = 'none';
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then(() => {
+                if (loginSuccess) loginSuccess.style.display = 'block';
+                setTimeout(() => {
+                    if (loginModal) loginModal.classList.remove('active');
+                    if (loginSuccess) loginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; // open after login 
+                }, 1200);
+            })
+            .catch(err => {
+                if (loginError) loginError.textContent = err.message.replace('Firebase:', '');
+            });
+    });
+}
+
+// --- Auth State & Logout Button ---
+function setAuthButton(user) {
+    const oldLogout = document.getElementById('logoutBtn');
+    if (oldLogout) oldLogout.remove();
+
+    if (user) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        const logoutBtn = document.createElement('a');
+        logoutBtn.href = "#logout";
+        logoutBtn.id = "logoutBtn";
+        logoutBtn.className = "btn btn-secondary";
+        logoutBtn.style.marginLeft = "1.5rem";
+        logoutBtn.textContent = "Logout";
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            firebase.auth().signOut().then(() => {
+                window.location.href = "index.html"; // open after logout
+            });
+        });
+        navMenu.appendChild(logoutBtn);
+    } else {
+        if (loginBtn) loginBtn.style.display = '';
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) logoutBtn.remove();
+    }
+}
+
+// --- Auth State or Page Access Control ---
+firebase.auth().onAuthStateChanged(function(user) {
+    setAuthButton(user);
+    const isIndex = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/") || window.location.pathname === "/index.html";
+    const isHome = window.location.pathname.endsWith("home.html");
+    if (user) {
+        // If logged in and on index, redirect to home
+        if (isIndex) {
+            window.location.href = "home.html";
+        }
+    } else {
+        // If not logged in and on home, redirect to index
+        if (isHome) {
+            window.location.href = "index.html";
+        }
+    }
+});
+
+// --- Mobile Login Modal Logic ---
+const showMobileLoginBtn = document.getElementById('showMobileLoginBtn');
+const mobileLoginModal = document.getElementById('mobileLoginModal');
+const mobileLoginClose = document.getElementById('mobileLoginClose');
+const showEmailLogin = document.getElementById('showEmailLogin');
+const mobileLoginForm = document.getElementById('mobileLoginForm');
+const mobileLoginError = document.getElementById('mobileLoginError');
+const mobileLoginSuccess = document.getElementById('mobileLoginSuccess');
+const loginMobileInput = document.getElementById('loginMobile');
+const loginWithMobileBtn = document.getElementById('loginWithMobileBtn');
+const otpSection = document.getElementById('otpSection');
+const loginOtpInput = document.getElementById('loginOtp');
+const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+let confirmationResult = null;
+
+if (showMobileLoginBtn) {
+    showMobileLoginBtn.addEventListener('click', function() {
+        if (loginModal) loginModal.classList.remove('active');
+        if (mobileLoginModal) mobileLoginModal.classList.add('active');
+        if (mobileLoginError) mobileLoginError.textContent = '';
+        if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+        if (otpSection) otpSection.style.display = 'none';
+    });
+}
+if (showEmailLogin) {
+    showEmailLogin.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (mobileLoginModal) mobileLoginModal.classList.remove('active');
+        if (loginModal) loginModal.classList.add('active');
+        if (loginError) loginError.textContent = '';
+        if (loginSuccess) loginSuccess.style.display = 'none';
+    });
+}
+if (mobileLoginClose) {
+    mobileLoginClose.addEventListener('click', () => {
+        if (mobileLoginModal) mobileLoginModal.classList.remove('active');
+        if (mobileLoginError) mobileLoginError.textContent = '';
+        if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+        if (otpSection) otpSection.style.display = 'none';
+    });
+}
+if (mobileLoginModal) {
+    mobileLoginModal.addEventListener('click', (e) => {
+        if (e.target === mobileLoginModal) {
+            mobileLoginModal.classList.remove('active');
+            if (mobileLoginError) mobileLoginError.textContent = '';
+            if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+            if (otpSection) otpSection.style.display = 'none';
+        }
+    });
+}
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (mobileLoginModal) mobileLoginModal.classList.remove('active');
+        if (mobileLoginError) mobileLoginError.textContent = '';
+        if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+        if (otpSection) otpSection.style.display = 'none';
+    }
+});
+
+// --- Login with Mobile Number and OTP (in mobile modal) ---
+if (loginWithMobileBtn && loginMobileInput) {
+    loginWithMobileBtn.addEventListener('click', function () {
+        if (mobileLoginError) mobileLoginError.textContent = '';
+        if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+        const mobile = loginMobileInput.value.trim();
+        if (!/^\d{10}$/.test(mobile)) {
+            mobileLoginError.textContent = "Please enter a valid 10-digit mobile number.";
+            return;
+        }
+        // Setup reCAPTCHA
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                size: 'invisible',
+                callback: function(response) {}
+            });
+        }
+        const appVerifier = window.recaptchaVerifier;
+        // Send OTP
+        firebase.auth().signInWithPhoneNumber("+91" + mobile, appVerifier)
+            .then(function(result) {
+                confirmationResult = result;
+                if (otpSection) otpSection.style.display = '';
+                mobileLoginError.textContent = "OTP sent to your mobile number.";
+            })
+            .catch(function(error) {
+                mobileLoginError.textContent = error.message.replace('Firebase:', '');
+                if (window.recaptchaVerifier) {
+                    window.recaptchaVerifier.clear();
+                    window.recaptchaVerifier = null;
+                }
+            });
+    });
+}
+
+if (verifyOtpBtn && loginOtpInput) {
+    verifyOtpBtn.addEventListener('click', function () {
+        if (!confirmationResult) {
+            mobileLoginError.textContent = "Please request OTP first.";
+            return;
+        }
+        const otp = loginOtpInput.value.trim();
+        if (!/^\d{6}$/.test(otp)) {
+            mobileLoginError.textContent = "Please enter a valid 6-digit OTP.";
+            return;
+        }
+        confirmationResult.confirm(otp)
+            .then(function(result) {
+                // User signed in successfully.
+                if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'block';
+                setTimeout(() => {
+                    if (mobileLoginModal) mobileLoginModal.classList.remove('active');
+                    if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'none';
+                    window.location.href = "home.html"; 
+                }, 1200);
+            })
+            .catch(function(error) {
+                mobileLoginError.textContent = error.message.replace('Firebase:', '');
+            });
+    });
+}

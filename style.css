@@ -484,13 +484,12 @@ color: #2b8a78;
     font-size: 1.2rem;
 }
 
-.login-modal-content,
-.signup-modal-content {
+.login-data,
+.signup-data {
     max-width: 350px;
 }
 
-.login-title,
-.signup-title {
+.title{
     text-align: center;
 }
 
@@ -590,8 +589,8 @@ color: #2b8a78;
 }
 
 /* Signup/Login Modal Responsive Styles */
-.howitworks-content.login-modal-content,
-.howitworks-content.signup-modal-content {
+.howitworks-content.login-data,
+.howitworks-content.signup-data {
     max-width: 350px;
     width: 95vw;
     margin: 1.5rem auto 0 auto;
@@ -638,8 +637,8 @@ color: #2b8a78;
     margin-top: 0.5rem;
 }
 @media (max-width: 600px) {
-    .howitworks-content.login-modal-content,
-    .howitworks-content.signup-modal-content {
+    .howitworks-content.login-data,
+    .howitworks-content.signup-data {
         padding: 1.2rem 0.5rem;
         max-width: 98vw;
         min-width: 0;
@@ -651,19 +650,17 @@ color: #2b8a78;
         font-size: 0.98rem;
         padding: 0.45rem;
     }
-    .signup-title,
-    .login-title {
+    .title {
         font-size: 1.2rem;
     }
 }
 
 @media (max-width: 400px) {
-    .howitworks-content.login-modal-content,
-    .howitworks-content.signup-modal-content {
+    .howitworks-content.login-data,
+    .howitworks-content.signup-data {
         padding: 0.7rem 0.2rem;
     }
-    .signup-title,
-    .login-title {
+    .title {
         font-size: 1.05rem;
     }
 }
