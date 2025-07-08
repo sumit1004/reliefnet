@@ -12,4 +12,5 @@ Technology used
 3. Javascript,
 
 Checkpoint 2:Completed login and signup form at 2:12 PM,
+
 adding login and signup form the the website but without authentication 
