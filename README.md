@@ -107,3 +107,8 @@ Volunteers can upload images or files as proof after finishing a task. This adds
 All of these features are now integrated with Firebase Realtime Database and storage, so data is saved securely and updates happen in real-time.
 
 This checkpoint makes the Volunteer Dashboard fully functional and ready for practical use, allowing volunteers to manage their activities, track resources, stay updated with alerts, and actively participate in the relief operations.
+
+
+
+Checkpoint 7: Admin Login and Authentication (Completed)
+In this checkpoint, I added the login form for the admin panel and completed the full authentication process for admin users. I also tested all login functionalities to make sure data is being stored and verified properly in the database. During this commit, I checked that all login data flows work correctly and confirmed that the system is storing and retrieving information as expected without any errors. This ensures that only authorized admins can access the dashboard securely.
