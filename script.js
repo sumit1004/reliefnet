@@ -446,25 +446,25 @@ function setAuthButton(user) {
     }
 }
 
-// --- Auth State or Page Access Control ---
+// ---  Page Access Control ---
 firebase.auth().onAuthStateChanged(function(user) {
     setAuthButton(user);
     const isIndex = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/") || window.location.pathname === "/index.html";
     const isHome = window.location.pathname.endsWith("home.html");
     if (user) {
-        // If logged in and on index, redirect to home
+        // after login redirect to home page
         if (isIndex) {
             window.location.href = "home.html";
         }
     } else {
-        // If not logged in and on home, redirect to index
+        // after logout index page open 
         if (isHome) {
             window.location.href = "index.html";
         }
     }
 });
 
-// --- Mobile Login Modal Logic ---
+// --- Mobile Login  ---
 const showMobileLoginBtn = document.getElementById('showMobileLoginBtn');
 const mobileLoginModal = document.getElementById('mobileLoginModal');
 const mobileLoginClose = document.getElementById('mobileLoginClose');
@@ -524,7 +524,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// --- Login with Mobile Number and OTP (in mobile modal) ---
+// --- Login with Mobile Number and OTP  ---
 if (loginWithMobileBtn && loginMobileInput) {
     loginWithMobileBtn.addEventListener('click', function () {
         if (mobileLoginError) mobileLoginError.textContent = '';
@@ -587,6 +587,6 @@ if (verifyOtpBtn && loginOtpInput) {
 }
 
 
-// volunteer authentication code
+
 
 

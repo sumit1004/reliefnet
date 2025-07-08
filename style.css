@@ -424,6 +424,7 @@ color: #2b8a78;
     padding: 2rem 1.5rem;
     max-width: 420px;
     width: 90vw;
+    /* left:35% ; */
     box-shadow: var(--shadow);
     position: relative;
     text-align: center;
@@ -432,6 +433,11 @@ color: #2b8a78;
     margin:1.5rem 0 0 0; 
     padding-left:1.2em;
 }
+
+.left{
+left: 35%;
+}
+
 .howitworks-content input[type="email"],
 .howitworks-content input[type="password"] {
     border: 1px solid #ccc;

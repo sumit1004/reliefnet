@@ -42,18 +42,114 @@
       <p class="dashboard-intro">Empower your community. Track your impact. Take action now.</p>
     </section>
 
-    <section style="margin-top:2em;">
-      <h2>SOS Reports</h2>
-      <div id="sosReportsContainer" style="margin-top:1em;">
-        <div style="color:#888;">Loading SOS reports...</div>
+    <!-- Volunteer Teams Section -->
+    <section class="volunteer-team-section">
+      <h2>My Team</h2>
+      <div id="volunteerTeamSection">
+        <div style="color:#888;">Loading your team info...</div>
       </div>
     </section>
 
-    <section style="margin-top:2em;">
-      <h2>Missing Reports</h2>
-      <div id="missingReportsContainer" style="margin-top:1em;">
-        <div style="color:#888;">Loading missing reports...</div>
+    <!-- Available Resources Section -->
+    <section class="available-resources-section">
+      <h2>Update Available Resources</h2>
+      <form id="resourceForm">
+        <div id="resourceInputs">
+          <div class="resource-row">
+            <div>
+              <label for="resourceTypeInput">Resource Type</label>
+              <input type="text" class="resourceTypeInput" id="resourceTypeInput" placeholder="e.g. Water" required>
+            </div>
+            <div>
+              <label for="resourceQtyInput">Quantity</label>
+              <input type="number" class="resourceQtyInput" id="resourceQtyInput" min="1" required>
+            </div>
+            <button type="button" class="addResourceBtn" aria-label="Add Resource">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div style="margin-top:0.7em;">
+          <label for="resourceLocation">Location</label>
+          <input type="text" id="resourceLocation" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa fa-upload" style="margin-right:0.4em;"></i>Submit Resources
+        </button>
+      </form>
+      <h1 style="font-size:1.2em;margin:1.2em 0 0.7em 0;">Available Resources</h1>
+      <div id="resourceList"></div>
+    </section>
+
+    <!-- Assigned Tasks Section -->
+    <section class="assigned-tasks-section">
+      <h2>Assigned Tasks</h2>
+      <div id="assignedTasksList" class="assigned-tasks-list"></div>
+    </section>
+
+    <!-- Upcoming Tasks and Alerts Section -->
+    <section class="upcoming-tasks-section">
+      <h2>Upcoming Tasks & Alerts</h2>
+      <div class="todays-briefing" id="todaysBriefing"></div>
+      <ul id="upcomingTasksList" class="upcoming-tasks-list"></ul>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+      <h2>Assigned Locations Map</h2>
+      <div id="mapPlaceholder" class="map-placeholder">
+        <span><i class="fa fa-map-marker"></i> Map will display assigned locations and relief points here.</span>
       </div>
+    </section>
+
+    <!-- Resource Request Form -->
+    <section class="resource-request-section">
+      <h2>Request Additional Resources</h2>
+      <form id="resourceRequestForm" class="resource-request-form">
+        <div>
+          <label for="requestResourceType">Resource Type</label>
+          <input type="text" id="requestResourceType" required placeholder="e.g. Water, Food">
+        </div>
+        <div>
+          <label for="requestResourceQty">Quantity</label>
+          <input type="number" id="requestResourceQty" min="1" required>
+        </div>
+        <div>
+          <label for="requestResourceMsg">Message</label>
+          <textarea id="requestResourceMsg" rows="2" required placeholder="Short message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+      </form>
+      <div id="resourceRequestStatus" class="resource-request-status"></div>
+    </section>
+
+    <!-- Performance Tracker Section -->
+    <section class="performance-tracker-section">
+      <h2>Performance Tracker</h2>
+      <div class="performance-stats">
+        <div>
+          <span id="tasksCompleted" class="stat-number">0</span>
+          <span class="stat-label">Tasks Completed</span>
+        </div>
+        <div>
+          <span id="peopleHelped" class="stat-number">0</span>
+          <span class="stat-label">People Helped</span>
+        </div>
+        <div>
+          <span id="badgesEarned" class="stat-number">-</span>
+          <span class="stat-label">Badges</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Document Upload Section -->
+    <section class="document-upload-section">
+      <h2>Upload Proof of Task Completion</h2>
+      <form id="documentUploadForm" class="document-upload-form" enctype="multipart/form-data">
+        <input type="file" id="taskProofFile" accept="image/*,.pdf" required>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+      <div id="uploadStatus" class="upload-status"></div>
     </section>
   </main>
 
@@ -67,8 +163,10 @@
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database-compat.js"></script>
-<script src="volunteer.js"></script>
+  <script src="volunteer.js"></script>
 </body>
 </html>
+  
+
 
 
