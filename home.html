@@ -9,19 +9,111 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="css/home.css">
+    <style>
 
+    </style>
 </head>
 
 <body>
     <header class="header">
-        <div class="header-flex">
+        <div class="header">
             <div class="logo">ReliefNet</div>
+            <!-- Menu icon for mobile -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <i class="fa fa-bars"></i>
+            </button>
             <nav class="nav" id="navMenu">
+                <a href="#mapSection" class="btn btn-link" data-i18n="shelter">Shelters</a>
+                <a href="#resourcesSection" class="btn btn-link" data-i18n="resources_nearby">Resources</a>
+                <a href="#missingSection" class="btn btn-link" data-i18n="missing_persons">Missing</a>
+                <a href="#contacts" class="btn btn-link" data-i18n="emergency_contacts">Contacts</a>
                 <a href="#" class="btn btn-primary" id="logoutBtn" style="display:none;">Logout</a>
             </nav>
+            <select id="langSelect" class="lang-select" aria-label="Language"></select>
         </div>
     </header>
-<h1>Comming Soon</h1>
+
+    <!-- Sidebar for mobile navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">ReliefNet</span>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#mapSection" class="sidebar-link" data-i18n="shelter">Shelters</a>
+            <a href="#resourcesSection" class="sidebar-link" data-i18n="resources_nearby">Resources</a>
+            <a href="#missingSection" class="sidebar-link" data-i18n="missing_persons">Missing</a>
+            <a href="#contacts" class="sidebar-link" data-i18n="emergency_contacts">Contacts</a>
+            <a href="#" class="sidebar-link" id="sidebarLogoutBtn" style="display:none;">Logout</a>
+            <select id="sidebarLangSelect" class="lang-select" aria-label="Language"></select>
+        </nav>
+
+    </div>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <section class="alerts-section" id="alertsSection"></section>
+
+    <main class="main-content">
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <h1 data-i18n="hero_title">Empowering communities in crisis.</h1>
+                <p data-i18n="hero_desc">Request help, find shelters, and stay informed during disasters.</p>
+                <button class="sos-btn-main" id="sosBtn" data-i18n="request_sos">SOS Help</button>
+            </div>
+        </section>
+
+        <section class="sos-status-section" id="sosStatusSection"></section>
+
+        <section class="section map-section" id="mapSection">
+            <div class="section-title" data-i18n="nearby_shelters">Nearby Shelters & Safe Zones</div>
+            <div class="map-filters">
+                <button class="filter-btn active" data-type="shelter" data-i18n="shelter">Shelter</button>
+                <button class="filter-btn" data-type="medical" data-i18n="medical_camp">Medical Camp</button>
+                <button class="filter-btn" data-type="food" data-i18n="food_center">Food Center</button>
+            </div>
+            <div id="map"></div>
+        </section>
+
+        <section class="section resources-section" id="resourcesSection">
+            <div class="section-title" data-i18n="resources_nearby">Available Resources Nearby</div>
+            <div id="resourcesList" class="resources-list"></div>
+        </section>
+
+        <section class="section missing-section" id="missingSection">
+            <div class="section-title" data-i18n="missing_persons">Missing Persons</div>
+            <form id="missingForm" class="missing-form">
+                <input type="text" id="missingName" placeholder="Name" required>
+                <input type="number" id="missingAge" placeholder="Age" min="0" required>
+                <input type="text" id="missingAadhar" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}"
+                    required>
+                <input type="text" id="missingFather" placeholder="Father's Name" required>
+                <input type="text" id="missingCity" placeholder="City" required>
+                <input type="text" id="missingState" placeholder="State" required>
+                <input type="text" id="missingCountry" placeholder="Country" required>
+                <input type="text" id="missingLastSeen" placeholder="Last Seen Location" required>
+                <input type="text" id="missingContact" placeholder="Contact Number" required>
+                <input type="text" id="missingClothes" placeholder="Clothes/Appearance Details">
+                <input type="text" id="missingOther" placeholder="Other Identifying Info">
+                <input type="file" id="missingPhoto" accept="image/*">
+                <button type="submit" class="btn btn-primary" data-i18n="report_missing">Report Missing</button>
+            </form>
+            <div id="missingList" class="missing-list"></div>
+        </section>
+
+        <section class="section contacts-section" id="contacts">
+            <div class="section-title" data-i18n="emergency_contacts">Emergency Contacts</div>
+            <div class="contacts-list">
+                <a href="tel:112" class="contact-btn police"><i class="fa fa-phone"></i> Police (112)</a>
+                <a href="tel:102" class="contact-btn ambulance"><i class="fa fa-ambulance"></i> Ambulance (102)</a>
+                <a href="tel:1098" class="contact-btn childline"><i class="fa fa-child"></i> Childline (1098)</a>
+                <a href="tel:108" class="contact-btn medical"><i class="fa fa-plus-square"></i> Medical (108)</a>
+                <a href="tel:100" class="contact-btn"><i class="fa fa-phone"></i> Local Helpline</a>
+                <a href="tel:1800123456" class="contact-btn ngo"><i class="fa fa-users"></i> NGO Support</a>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
         <div class="footer-flex">
@@ -35,6 +127,45 @@
             </div>
         </div>
     </footer>
+
+    <!-- SOS Modal -->
+    <div id="sosModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="sosModalClose">&times;</span>
+            <h2 data-i18n="request_sos">Request SOS Help</h2>
+            <form id="sosForm" class="sos-form">
+                <input type="text" id="sosName" placeholder="Name" required>
+                <input type="tel" id="sosPhone" placeholder="Phone" required>
+                <div class="location-row">
+                    <input type="text" id="sosLocation" placeholder="Location" readonly required>
+                    <button type="button" id="detectLocationBtn" class="btn btn-link"
+                        data-i18n="detect_location">Detect</button>
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="helpType" value="food"> <span
+                            data-i18n="food">Food</span></label>
+                    <label><input type="checkbox" name="helpType" value="water"> <span
+                            data-i18n="water">Water</span></label>
+                    <label><input type="checkbox" name="helpType" value="shelter"> <span
+                            data-i18n="shelter">Shelter</span></label>
+                    <label><input type="checkbox" name="helpType" value="medical"> <span
+                            data-i18n="medical">Medical</span></label>
+                    <label><input type="checkbox" name="helpType" value="rescue"> <span
+                            data-i18n="rescue">Rescue</span></label>
+                </div>
+                <select id="sosUrgency" required>
+                    <option value="" disabled selected data-i18n="urgency">Urgency</option>
+                    <option value="low" data-i18n="low">Low</option>
+                    <option value="medium" data-i18n="medium">Medium</option>
+                    <option value="high" data-i18n="high">High</option>
+                    <option value="critical" data-i18n="critical">Critical</option>
+                </select>
+                <textarea id="sosDetails" placeholder="Details" rows="3"></textarea>
+                <button type="submit" class="btn btn-danger" data-i18n="submit_sos">Submit SOS</button>
+                <div id="sosFormMsg" class="form-msg"></div>
+            </form>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
