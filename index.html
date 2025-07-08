@@ -310,12 +310,31 @@
         </div>
     </div>
 
+    
+    <!-- Add Admin Login Modal -->
+    <div id="adminLoginModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="adminLoginClose">&times;</span>
+            <h2 class="login-title">Admin Login</h2>
+            <form id="adminLoginForm" class="login-form">
+                <label for="adminLoginEmail">Admin Email</label>
+                <input type="email" id="adminLoginEmail" required>
+                <label for="adminLoginPassword">Password</label>
+                <input type="password" id="adminLoginPassword" required>
+                <button type="submit" class="btn btn-primary login-submit-btn">Login</button>
+                <div id="adminLoginError" class="login-error"></div>
+            </form>
+            <div id="adminLoginSuccess" class="login-success">Login successful! Redirecting...</div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-init.js"></script>
-
+<script src="js/admin-auth.js"></script>
     <script src="script.js"></script>
+    <script src="js/volunteer-firebase.js"></script>
 
 <script>
 
@@ -432,6 +451,56 @@
             });
         }
     });
+
+// Admin modal elements
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const adminLoginClose = document.getElementById('adminLoginClose');
+
+        // Hide old login modal on page load
+        if (loginModal) {
+            loginModal.classList.remove('active');
+        }
+
+        if (loginBtn && loginRoleModal) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (loginModal) loginModal.classList.remove('active');
+                loginRoleModal.style.display = 'block';
+            });
+        }
+        if (loginRoleClose && loginRoleModal) {
+            loginRoleClose.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+            });
+        }
+        if (loginRoleModal) {
+            loginRoleModal.addEventListener('click', function(e) {
+                if (e.target === loginRoleModal) {
+                    loginRoleModal.style.display = 'none';
+                }
+            });
+        }
+
+   // Admin Login Modal logic
+        if (adminLoginBtn && adminLoginModal) {
+            adminLoginBtn.addEventListener('click', function() {
+                document.getElementById('loginRoleModal').style.display = 'none';
+                adminLoginModal.style.display = 'block';
+            });
+        }
+        if (adminLoginClose && adminLoginModal) {
+            adminLoginClose.addEventListener('click', function() {
+                adminLoginModal.style.display = 'none';
+            });
+        }
+        if (adminLoginModal) {
+            adminLoginModal.addEventListener('click', function(e) {
+                if (e.target === adminLoginModal) {
+                    adminLoginModal.style.display = 'none';
+                }
+            });
+        }
 
     document.addEventListener('DOMContentLoaded', function() {
         // Mobile menu toggle logic
