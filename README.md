@@ -1,4 +1,4 @@
-Checkpoint 1: Completed landing page with these following sections:
+Checkpoint 1: Completed landing page with these following sections, at 1:00 PM
 1. navbar ,
 2. herosection,
 3. key features, 
@@ -7,4 +7,10 @@ Checkpoint 1: Completed landing page with these following sections:
 6. how its work popup button,
 
 Technology used
-1. html 2. CSS 3. Javascript
+1. html,
+2. CSS,
+3. Javascript,
+
+Checkpoint 2:Completed login and signup form at 2:12 PM,
+
+adding login and signup form the the website but without authentication 
