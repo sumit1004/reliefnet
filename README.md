@@ -15,5 +15,5 @@ Checkpoint 2:Completed login and signup form at 2:12 PM,
 
 adding login and signup form the the website but without authentication 
 
-CheckPoint 3: Completed login and signup authentication using firebase services
+CheckPoint 3: Completed login and signup authentication using firebase services at 4:15 PM
 
