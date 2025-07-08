@@ -148,7 +148,121 @@
         </div>
     </div>
 
+    <div id="loginModal" class="howitworks">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="loginClose">&times;</span>
+            <h2 class="login-title">Login</h2>
+            <div class="login-icons-row">
+                <button type="button" id="googleSignInBtn" class="btn btn-icon google-signin-btn" title="Sign in with Google">
+                    <i class="fa fa-google"></i>
+                </button>
+                <button type="button" id="showMobileLoginBtn" class="btn btn-icon mobile-signin-btn" title="Login with Mobile">
+                    <i class="fa fa-mobile"></i>
+                </button>
+            </div>
+            <form id="loginForm" class="login-form">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required>
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required>
+                <button type="submit" class="btn btn-primary login-submit-btn">Login</button>
+                <div id="loginError" class="login-error"></div>
+            </form>
+            <div id="loginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showSignup">Don't have an account? Sign up</a>
+            </div>
+        </div>
+    </div>
 
+    <!-- Mobile Login Modal -->
+    <div id="mobileLoginModal" class="howitworks">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="mobileLoginClose">&times;</span>
+            <h2 class="login-title">Mobile Login</h2>
+            <form id="mobileLoginForm" class="login-form">
+                <label for="loginMobile">Mobile Number</label>
+                <input type="tel" id="loginMobile" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit Mobile Number" required>
+                <div id="recaptcha-container" style="margin: 0.5rem 0;"></div>
+                <button type="button" class="btn btn-secondary login-mobile-btn" id="loginWithMobileBtn">Send OTP</button>
+                <div id="otpSection" style="display:none;">
+                    <label for="loginOtp">Enter OTP</label>
+                    <input type="text" id="loginOtp" maxlength="6" placeholder="Enter OTP">
+                    <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
+                </div>
+                <div id="mobileLoginError" class="login-error"></div>
+            </form>
+            <div id="mobileLoginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showEmailLogin">Login with Email/Password</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="howitworks">
+        <div class="howitworks-content signup-modal-content signup-modal-scroll">
+            <span class="howitworks-close" id="signupClose">&times;</span>
+            <h2 class="signup-title">Sign Up</h2>
+            <div class="signup-form-scroll-wrapper">
+                <form id="signupForm" class="signup-form">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required>
+
+                    <label for="signupAadhar">Aadhar Number</label>
+                    <input type="text" id="signupAadhar" maxlength="12" pattern="\d{12}" required placeholder="12-digit Aadhar Number">
+
+                    <label for="signupMobile">Mobile Number</label>
+                    <input type="tel" id="signupMobile" maxlength="10" pattern="[0-9]{10}" required placeholder="10-digit Mobile Number">
+
+                    <label for="signupAddress">Address</label>
+                    <textarea id="signupAddress" rows="2" required placeholder="Full Address"></textarea>
+
+                    <label for="signupDOB">Date of Birth</label>
+                    <input type="date" id="signupDOB" required>
+
+                    <label for="signupGender">Gender</label>
+                    <select id="signupGender" required>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary signup-submit-btn">Sign Up</button>
+                    <div id="signupError" class="signup-error"></div>
+                </form>
+            </div>
+            <div id="signupSuccess" class="signup-success">Signup successful! You can now log in.</div>
+            <div class="signup-bottom-link">
+                <a href="#" id="showLogin">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Login Role Selection Popup Modal -->
+    <div id="loginRoleModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content login-modal-content" style="max-width: 350px;">
+            <span class="howitworks-close" id="loginRoleClose" style="top: 10px; right: 16px;">&times;</span>
+            <h2 class="login-title" style="margin-bottom: 1.5rem;">Login as</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button type="button" class="btn btn-primary" id="victimLoginBtn">Victim Login</button>
+                <button type="button" class="btn btn-secondary" id="volunteerLoginBtn">Volunteer Login</button>
+                <button type="button" class="btn btn-secondary" id="ngoLoginBtn">NGO Login</button>
+                <button type="button" class="btn btn-secondary" id="adminLoginBtn">Admin Login</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="firebase-init.js"></script>
 
     <script src="script.js"></script>
 </body>

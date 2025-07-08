@@ -484,6 +484,245 @@ color: #2b8a78;
     font-size: 1.2rem;
 }
 
+.login-modal-content,
+.signup-modal-content {
+    max-width: 350px;
+}
+
+.login-title,
+.signup-title {
+    text-align: center;
+}
+
+.google-signin-btn {
+    width: 100%;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login-form,
+.signup-form {
+    margin-top: 0;
+}
+
+.signup-form {
+    margin-top: 1.5rem;
+}
+
+.login-form label,
+.signup-form label {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.login-form input,
+.signup-form input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.login-submit-btn,
+.signup-submit-btn {
+    width: 100%;
+}
+
+.login-error,
+.signup-error {
+    color: #c00;
+    margin-top: 1rem;
+    font-size: 0.95em;
+}
+
+.login-success,
+.signup-success {
+    color: var(--primary);
+    margin-top: 1rem;
+    font-size: 1em;
+    display: none;
+}
+
+.login-bottom-link,
+.signup-bottom-link {
+    text-align: center;
+    margin-top: 1.2rem;
+}
+
+.login-bottom-link a,
+.signup-bottom-link a {
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.login-or {
+    text-align: center;
+    margin: 0.7rem 0 0.3rem 0;
+    color: #888;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+}
+
+.login-mobile-btn {
+    margin-bottom: 0.5rem;
+}
+
+.signup-form textarea,
+.signup-form select {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Signup/Login Modal Responsive Styles */
+.howitworks-content.login-modal-content,
+.howitworks-content.signup-modal-content {
+    max-width: 350px;
+    width: 95vw;
+    margin: 1.5rem auto 0 auto;
+    padding: 2rem 1.2rem;
+    box-sizing: border-box;
+}
+
+.signup-form,
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.signup-form label,
+.login-form label {
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.signup-form input,
+.signup-form textarea,
+.signup-form select,
+.login-form input {
+    width: 100%;
+    margin-bottom: 0.7rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.signup-form textarea {
+    min-height: 60px;
+    max-height: 120px;
+}
+
+.signup-submit-btn,
+.login-submit-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+@media (max-width: 600px) {
+    .howitworks-content.login-modal-content,
+    .howitworks-content.signup-modal-content {
+        padding: 1.2rem 0.5rem;
+        max-width: 98vw;
+        min-width: 0;
+    }
+    .signup-form input,
+    .signup-form textarea,
+    .signup-form select,
+    .login-form input {
+        font-size: 0.98rem;
+        padding: 0.45rem;
+    }
+    .signup-title,
+    .login-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .howitworks-content.login-modal-content,
+    .howitworks-content.signup-modal-content {
+        padding: 0.7rem 0.2rem;
+    }
+    .signup-title,
+    .login-title {
+        font-size: 1.05rem;
+    }
+}
+
+.signup-modal-scroll {
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-form-scroll-wrapper {
+    overflow-y: auto;
+    max-height: 60vh;
+    padding-right: 4px;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .signup-modal-scroll {
+        max-height: 98vh;
+    }
+    .signup-form-scroll-wrapper {
+        max-height: 55vh;
+    }
+}
+
+@media (max-width: 400px) {
+    .signup-form-scroll-wrapper {
+        max-height: 45vh;
+    }
+}
+
+.login-icons-row {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+}
+.btn.btn-icon {
+    background: #fff;
+    color: var(--primary);
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    box-shadow: var(--shadow);
+    transition: background 0.2s, color 0.2s;
+    padding: 0;
+}
+.btn.btn-icon:hover {
+    background: var(--primary-light);
+    color: var(--secondary);
+    border-color: var(--primary);
+}
 
 
 /* Responsive styles */
@@ -543,3 +782,4 @@ color: #2b8a78;
         min-width: 70px;
     }
 }
+
