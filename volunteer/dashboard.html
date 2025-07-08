@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Volunteer Dashboard | ReliefNet</title>
+  <link rel="stylesheet" href="volunteer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+  <header class="header alt-header">
+    <div class="header-flex">
+      <div class="logo alt-logo"><i class="fa fa-handshake-o"></i> ReliefNet</div>
+      <nav class="nav" style="display: flex; align-items: center; gap: 1.2rem;">
+        <!-- Profile Icon Button -->
+        <a href="#" id="profileIconBtn" title="My Profile" style="font-size:1.5em; color:#333; margin-right:0.7em; display:flex; align-items:center;">
+          <i class="fa fa-user-circle"></i>
+        </a>
+        <a href="#" class="btn btn-primary" id="logoutBtn" style="background:#e74c3c;border:none;padding:0.5em 1.2em;border-radius:5px;color:#fff;font-weight:600;transition:background 0.2s;">
+          <i class="fa fa-sign-out" style="margin-right:0.4em;"></i>Logout
+        </a>
+      </nav>
+    </div>
+    <!-- Profile Popup Modal -->
+    <div id="profilePopup" class="profile-popup-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);">
+      <div class="profile-popup-content" style="background:#fff;padding:2em 1.5em;border-radius:10px;box-shadow:0 2px 16px rgba(0,0,0,0.15);min-width:280px;position:relative;">
+        <span class="profile-popup-close" id="profilePopupClose" style="position:absolute;top:10px;right:15px;font-size:1.5em;cursor:pointer;">&times;</span>
+        <h2 style="margin-top:0;">Volunteer Profile</h2>
+        <div class="profile-popup-details">
+          <div><strong>Name:</strong> <span id="popupName"></span></div>
+          <div><strong>Email:</strong> <span id="popupEmail"></span></div>
+          <div><strong>Mobile:</strong> <span id="popupMobile"></span></div>
+          <div><strong>Location:</strong> <span id="popupLocation"></span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-container alt-dashboard">
+    <section class="dashboard-welcome">
+      <h1>Welcome, <span class="highlight-user">Volunteer</span>!</h1>
+      <p class="dashboard-intro">Empower your community. Track your impact. Take action now.</p>
+    </section>
+
+    <section style="margin-top:2em;">
+      <h2>SOS Reports</h2>
+      <div id="sosReportsContainer" style="margin-top:1em;">
+        <div style="color:#888;">Loading SOS reports...</div>
+      </div>
+    </section>
+
+    <section style="margin-top:2em;">
+      <h2>Missing Reports</h2>
+      <div id="missingReportsContainer" style="margin-top:1em;">
+        <div style="color:#888;">Loading missing reports...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-flex">
+      <div>&copy; 2025 ReliefNet. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database-compat.js"></script>
+<script src="volunteer.js"></script>
+</body>
+</html>
+
+

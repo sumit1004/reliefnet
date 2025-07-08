@@ -585,3 +585,8 @@ if (verifyOtpBtn && loginOtpInput) {
             });
     });
 }
+
+
+// volunteer authentication code
+
+

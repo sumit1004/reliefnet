@@ -259,12 +259,257 @@
             </div>
         </div>
     </div>
+
+<!-- volunteer login code -->
+
+<div id="volunteerLoginModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content login-modal-content">
+            <span class="howitworks-close" id="volunteerLoginClose">&times;</span>
+            <h2 class="login-title">Volunteer Login</h2>
+            <form id="volunteerLoginForm" class="login-form">
+                <label for="volunteerLoginEmail">Email</label>
+                <input type="email" id="volunteerLoginEmail" required>
+                <label for="volunteerLoginPassword">Password</label>
+                <input type="password" id="volunteerLoginPassword" required>
+                <button type="submit" class="btn btn-primary login-submit-btn">Login</button>
+                <div id="volunteerLoginError" class="login-error"></div>
+            </form>
+            <div id="volunteerLoginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showVolunteerSignup">Don't have an account? Sign up</a>
+            </div>
+        </div>
+    </div>
+
+<!-- volunteer signup code -->
+
+<div id="volunteerSignupModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content signup-modal-content signup-modal-scroll" style="max-height: 90vh; overflow-y: auto;">
+            <span class="howitworks-close" id="volunteerSignupClose">&times;</span>
+            <h2 class="signup-title">Volunteer Sign Up</h2>
+            <form id="volunteerSignupForm" class="signup-form">
+                <label for="volunteerSignupName">Full Name</label>
+                <input type="text" id="volunteerSignupName" required>
+                <label for="volunteerSignupEmail">Email</label>
+                <input type="email" id="volunteerSignupEmail" required>
+                <label for="volunteerSignupPassword">Password</label>
+                <input type="password" id="volunteerSignupPassword" required>
+                <label for="volunteerSignupMobile">Mobile Number</label>
+                <input type="tel" id="volunteerSignupMobile" maxlength="10" pattern="[0-9]{10}" required placeholder="10-digit Mobile Number">
+                <label for="volunteerSignupSkills">Skills (comma separated)</label>
+                <input type="text" id="volunteerSignupSkills" placeholder="e.g. First Aid, Driving" required>
+                <label for="volunteerSignupLocation">Location</label>
+                <input type="text" id="volunteerSignupLocation" required>
+                <button type="submit" class="btn btn-primary signup-submit-btn">Sign Up</button>
+                <div id="volunteerSignupError" class="signup-error"></div>
+            </form>
+            <div id="volunteerSignupSuccess" class="signup-success">Signup successful! You can now log in.</div>
+            <div class="signup-bottom-link">
+                <a href="#" id="showVolunteerLogin">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-init.js"></script>
 
     <script src="script.js"></script>
+
+<script>
+
+    // --- Login Role Modal Logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginBtn = document.getElementById('loginBtn');
+        const loginRoleModal = document.getElementById('loginRoleModal');
+        const loginRoleClose = document.getElementById('loginRoleClose');
+        const victimLoginBtn = document.getElementById('victimLoginBtn');
+        const loginModal = document.getElementById('loginModal');
+        // Volunteer modal elements
+        const volunteerLoginBtn = document.getElementById('volunteerLoginBtn');
+        const volunteerLoginModal = document.getElementById('volunteerLoginModal');
+        const volunteerLoginClose = document.getElementById('volunteerLoginClose');
+        const showVolunteerSignup = document.getElementById('showVolunteerSignup');
+        const volunteerSignupModal = document.getElementById('volunteerSignupModal');
+        const volunteerSignupClose = document.getElementById('volunteerSignupClose');
+        const showVolunteerLogin = document.getElementById('showVolunteerLogin');
+
+        // Hide old login modal on page load
+        if (loginModal) {
+            loginModal.classList.remove('active');
+        }
+
+        if (loginBtn && loginRoleModal) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (loginModal) loginModal.classList.remove('active');
+                loginRoleModal.style.display = 'block';
+            });
+        }
+        if (loginRoleClose && loginRoleModal) {
+            loginRoleClose.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+            });
+        }
+        if (loginRoleModal) {
+            loginRoleModal.addEventListener('click', function(e) {
+                if (e.target === loginRoleModal) {
+                    loginRoleModal.style.display = 'none';
+                }
+            });
+        }
+        // Victim Login opens the old login modal
+        if (victimLoginBtn && loginModal && loginRoleModal) {
+            victimLoginBtn.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+                loginModal.classList.add('active');
+            });
+        }
+        // Volunteer Login opens the volunteer login modal
+        if (volunteerLoginBtn && volunteerLoginModal && loginRoleModal) {
+            volunteerLoginBtn.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+                volunteerLoginModal.style.display = 'block';
+            });
+        }
+        // Volunteer Login close
+        if (volunteerLoginClose && volunteerLoginModal) {
+            volunteerLoginClose.addEventListener('click', function() {
+                volunteerLoginModal.style.display = 'none';
+            });
+        }
+        // Volunteer Signup close
+        if (volunteerSignupClose && volunteerSignupModal) {
+            volunteerSignupClose.addEventListener('click', function() {
+                volunteerSignupModal.style.display = 'none';
+            });
+        }
+        // Show Volunteer Signup from Volunteer Login
+        if (showVolunteerSignup && volunteerLoginModal && volunteerSignupModal) {
+            showVolunteerSignup.addEventListener('click', function(e) {
+                e.preventDefault();
+                volunteerLoginModal.style.display = 'none';
+                volunteerSignupModal.style.display = 'block';
+            });
+        }
+        // Show Volunteer Login from Volunteer Signup
+        if (showVolunteerLogin && volunteerSignupModal && volunteerLoginModal) {
+            showVolunteerLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                volunteerSignupModal.style.display = 'none';
+                volunteerLoginModal.style.display = 'block';
+            });
+        }
+        // Close modals on outside click
+        [volunteerLoginModal, volunteerSignupModal].forEach(function(modal) {
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Volunteer Signup Form Submission
+        const volunteerSignupForm = document.getElementById('volunteerSignupForm');
+        if (volunteerSignupForm) {
+            volunteerSignupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // You can add your AJAX/Firebase signup logic here.
+                // On successful signup, redirect to the volunteer dashboard:
+                window.location.href = "volunteer/dashboard.html";
+            });
+        }
+
+        // Volunteer Login Form Submission
+        const volunteerLoginForm = document.getElementById('volunteerLoginForm');
+        if (volunteerLoginForm) {
+            volunteerLoginForm.addEventListener('submit', function(e) {
+                e.preventDefault()
+                window.location.href = "volunteer/dashboard.html";
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle logic
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('open');
+            if (navMenu.classList.contains('open')) {
+                document.body.classList.add('nav-open');
+            } else {
+                document.body.classList.remove('nav-open');
+            }
+        });
+        // Close sidebar on outside click (mobile)
+        document.addEventListener('click', function(e) {
+            if (
+                navMenu.classList.contains('open') &&
+                !navMenu.contains(e.target) &&
+                e.target !== menuToggle &&
+                !menuToggle.contains(e.target)
+            ) {
+                navMenu.classList.remove('open');
+                document.body.classList.remove('nav-open');
+            }
+        });
+        // Optional: close sidebar on navigation link click (mobile)
+        navMenu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 900) {
+                    navMenu.classList.remove('open');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+        });
+    });
+
+    // --- Fix: Mobile menu toggle logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        var menuToggle = document.getElementById('menuToggle');
+        var navMenu = document.getElementById('navMenu');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navMenu.classList.toggle('open');
+                if (navMenu.classList.contains('open')) {
+                    document.body.classList.add('nav-open');
+                } else {
+                    document.body.classList.remove('nav-open');
+                }
+            });
+
+            // Close sidebar on outside click (mobile)
+            document.addEventListener('click', function(e) {
+                if (
+                    navMenu.classList.contains('open') &&
+                    !navMenu.contains(e.target) &&
+                    e.target !== menuToggle &&
+                    !menuToggle.contains(e.target)
+                ) {
+                    navMenu.classList.remove('open');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+
+            // Optional: close sidebar on navigation link click (mobile)
+            navMenu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 900) {
+                        navMenu.classList.remove('open');
+                        document.body.classList.remove('nav-open');
+                    }
+                });
+            });
+        }
+    });
+</script>
+
 </body>
 
 </html>
