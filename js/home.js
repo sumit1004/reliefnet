@@ -30,7 +30,6 @@ if (!firebase.apps.length) {
 
 // --- Responsive Nav ---
 document.addEventListener('DOMContentLoaded', function() {
-    // No menu icon/sidebar logic, just show/hide logout button
     const logoutBtn = document.getElementById('logoutBtn');
     firebase.auth().onAuthStateChanged(function(user) {
         if (logoutBtn) {
@@ -207,7 +206,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// --- Save our soles Form Logic ---
+// --- Save our soles Form  ---
 const sosForm = document.getElementById('sosForm');
 const sosFormMsg = document.getElementById('sosFormMsg');
 const sosLocationInput = document.getElementById('sosLocation');
@@ -233,7 +232,6 @@ if (sosForm) {
     sosForm.onsubmit = function(e) {
         e.preventDefault();
         if (sosFormMsg) sosFormMsg.textContent = '';
-        // Removed name and phone
         const location = sosLocationInput.value.trim();
         const urgency = document.getElementById('sosUrgency').value;
         const details = document.getElementById('sosDetails').value.trim();
@@ -270,7 +268,7 @@ if (sosForm) {
 }
 
 
-// --- Map and Shelter Logic ---
+// --- Map and Shelter  ---
 let map;
 let markers = [];
 function initMap() {
@@ -306,7 +304,6 @@ setTimeout(initMap, 500);
 // --- Resources Nearby ---
 (function() {
     const resourcesList = document.getElementById('resourcesList');
-    // Use ReliefNet Admin DB for resources
     const resourcesConfig = {
         apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
         authDomain: "reliefnet-admin.firebaseapp.com",
@@ -414,7 +411,6 @@ const sidebarOverlay = document.getElementById('sidebarOverlay');
 const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
 const navMenu = document.getElementById('navMenu');
 
-// Clone language select for sidebar
 const sidebarLangSelect = document.getElementById('sidebarLangSelect');
 if (sidebarLangSelect && langSelect) {
     sidebarLangSelect.innerHTML = langSelect.innerHTML;
@@ -428,7 +424,7 @@ if (sidebarLangSelect && langSelect) {
     });
 }
 
-// Sidebar open/close logic
+// Sidebar open/close
 function openSidebar() {
     sidebar.classList.add('active');
     sidebarOverlay.classList.add('active');
@@ -448,7 +444,7 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', closeSidebar);
 });
 
-// Sync logout button visibility and action
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (logoutBtn) logoutBtn.style.display = user ? '' : 'none';
     if (sidebarLogoutBtn) sidebarLogoutBtn.style.display = user ? '' : 'none';
@@ -486,9 +482,8 @@ if (sidebarLogoutBtn) {
     sidebarLogoutBtn.addEventListener('click', logoutHandler);
 }
 
-// Relief Centers Map Logic
+// Relief Centers Map 
 (function() {
-    // ReliefNet Admin Firebase config for relief centers
     const reliefConfig = {
         apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
         authDomain: "reliefnet-admin.firebaseapp.com",

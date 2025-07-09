@@ -48,7 +48,7 @@ body {
     margin-top: 2rem;
 }
 
-/* SOS Table Styles */
+
 .ngo-sos-table {
     width: 100%;
     border-collapse: collapse;
@@ -75,7 +75,7 @@ body {
     font-size: 15px;
 }
 
-/* Missing Table Styles */
+
 .ngo-missing-table {
     width: 100%;
     border-collapse: collapse;
@@ -102,7 +102,7 @@ body {
     font-size: 15px;
 }
 
-/* Responsive Table Wrapper */
+
 .ngo-table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -110,7 +110,6 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* Table Responsive Tweaks */
 .ngo-sos-table,
 .ngo-missing-table {
     min-width: 900px;
@@ -120,11 +119,11 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
-/* Remove min-width reduction for mobile, keep table scrollable */
+
 @media (max-width: 700px) {
     .ngo-sos-table,
     .ngo-missing-table {
-        /* min-width: 600px; */ /* Remove this line */
+
         font-size: 13px;
     }
     .ngo-sos-table th,
@@ -139,13 +138,13 @@ body {
     }
 }
 
-/* Responsive Table Wrapper */
+
 .ngo-sos-list, .ngo-missing-list {
     width: 100%;
     overflow-x: auto;
 }
 
-/* NGO Profile Section */
+
 .ngo-profile-section {
     margin: 2rem 0 2.5rem 0;
     padding: 1.5rem 1rem 1rem 1rem;
@@ -221,7 +220,7 @@ body {
     background: #23705f;
 }
 
-/* Modal Styles */
+
 .ngo-modal {
     display: none;
     position: fixed;
@@ -254,9 +253,8 @@ body {
     color: #e74c3c;
 }
 
-/* Reports Section Styles */
+
 .ngo-reports-section {
-    /* max-width: 900px; */
     margin: 2.5rem auto 0 auto;
     background: #fff;
     border-radius: 1rem;
@@ -323,7 +321,7 @@ body {
     outline: 1.5px solid #2b8a78;
 }
 
-/* Resource Management Styles */
+
 .ngo-resource-action-btn {
     background: #e67e22;
     color: #fff;
@@ -352,7 +350,7 @@ body {
     background: #23705f;
 }
 
-/* Resource Card Grid */
+
 .ngo-resource-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -425,7 +423,7 @@ body {
     background: #23705f;
 }
 
-/* Resource Modal Row Flex */
+
 .ngo-resource-row-flex {
     display: flex;
     gap: 0.7em;
@@ -452,7 +450,7 @@ body {
 }
 
 
-/* Daily Briefing and Alerts Section */
+
 .ngo-daily-briefing {
     background: #f9f6e7;
     border-radius: 0.7em;
@@ -475,11 +473,11 @@ body {
     color: #444;
 }
 
-/* Donation Tracking Table tweaks */
+
 #donationTable {
     margin-bottom: 0.5em;
 }
-/* Daily Briefing and Alerts Section */
+
 .ngo-daily-briefing {
     background: #f9f6e7;
     border-radius: 0.7em;
@@ -502,7 +500,7 @@ body {
     color: #444;
 }
 
-/* Donation Tracking Table tweaks */
+
 #donationTable {
     margin-bottom: 0.5em;
 }

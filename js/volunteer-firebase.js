@@ -41,7 +41,6 @@ function handleVolunteerSignup(e) {
   volunteerAuth.createUserWithEmailAndPassword(email, password)
     .then(userCredential => {
       const user = userCredential.user;
-      // Store volunteer data in a separate node in the volunteer DB
       if (volunteerDb) {
         return volunteerDb.ref('volunteers/' + user.uid).set({
           name,
@@ -86,7 +85,7 @@ function handleVolunteerLogin(e) {
     });
 }
 
-// Attach handlers after DOMContentLoaded
+
 window.addEventListener('DOMContentLoaded', function() {
   const volunteerSignupForm = document.getElementById('volunteerSignupForm');
   if (volunteerSignupForm) {

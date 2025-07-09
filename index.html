@@ -614,7 +614,6 @@
 
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Mobile menu toggle logic
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
         menuToggle.addEventListener('click', function() {
@@ -625,7 +624,7 @@
                 document.body.classList.remove('nav-open');
             }
         });
-        // Close sidebar on outside click (mobile)
+        // Close sidebar on outside click
         document.addEventListener('click', function(e) {
             if (
                 navMenu.classList.contains('open') &&
@@ -637,7 +636,7 @@
                 document.body.classList.remove('nav-open');
             }
         });
-        // Optional: close sidebar on navigation link click (mobile)
+
         navMenu.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', function() {
                 if (window.innerWidth <= 900) {
@@ -648,7 +647,7 @@
         });
     });
 
-    // --- Fix: Mobile menu toggle logic ---
+    // ---  Mobile menu toggle logic ---
     document.addEventListener('DOMContentLoaded', function() {
         var menuToggle = document.getElementById('menuToggle');
         var navMenu = document.getElementById('navMenu');
@@ -664,7 +663,7 @@
                 }
             });
 
-            // Close sidebar on outside click (mobile)
+            // Close sidebar on outside click
             document.addEventListener('click', function(e) {
                 if (
                     navMenu.classList.contains('open') &&
@@ -677,7 +676,6 @@
                 }
             });
 
-            // Optional: close sidebar on navigation link click (mobile)
             navMenu.querySelectorAll('a').forEach(function(link) {
                 link.addEventListener('click', function() {
                     if (window.innerWidth <= 900) {
@@ -692,7 +690,6 @@
 
       // --- Donation Section Logic ---
     (function() {
-        // Use ReliefNet Admin DB for donations and NGOs
         const donationConfig = {
             apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
             authDomain: "reliefnet-admin.firebaseapp.com",
@@ -711,7 +708,6 @@
         }
         const donationDb = donationApp.database();
 
-        // Populate NGO list
         const donationTarget = document.getElementById('donationTarget');
         function populateNGOs() {
             donationDb.ref('ngos').once('value', snap => {
@@ -726,12 +722,11 @@
             });
         }
         if (donationTarget) {
-            // Remove old NGO options except admin
+
             while (donationTarget.options.length > 1) donationTarget.remove(1);
             populateNGOs();
         }
 
-        // Handle donation form submit
         const donationForm = document.getElementById('donationForm');
         if (donationForm) {
             donationForm.onsubmit = function(e) {
@@ -778,7 +773,7 @@
         }
     })();
 
-    // --- Join the Movement Button Logic ---
+
     document.addEventListener('DOMContentLoaded', function() {
         var joinNgoBtn = document.getElementById('joinNgoBtn');
         var joinVolunteerBtn = document.getElementById('joinVolunteerBtn');

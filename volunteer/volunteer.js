@@ -22,7 +22,7 @@ const reportsFirebaseConfig = {
   measurementId: "G-G89QL5968J"
 };
 
-// Volunteer Teams Firebase config (for teams data)
+// Volunteer Teams Firebase config 
 const teamsFirebaseConfig = {
   apiKey: "AIzaSyB--dzAihIn7xoGBHpPYHFDxd5cwJGhNLc",
   authDomain: "reliefnet-volunteer.firebaseapp.com",
@@ -34,16 +34,12 @@ const teamsFirebaseConfig = {
   measurementId: "G-3V4EJMLYFX"
 };
 
-// Initialize Profile Firebase app (named)
+
 const profileApp = firebase.initializeApp(profileFirebaseConfig, "profileApp");
 const profileDb = profileApp.database();
 const profileAuth = profileApp.auth();
-
-// Initialize Reports Firebase app (named)
 const reportsApp = firebase.initializeApp(reportsFirebaseConfig, "reportsApp");
 const reportsDb = reportsApp.database();
-
-// Initialize a separate Firebase app for teams if not already initialized
 let teamsApp;
 try {
   teamsApp = firebase.app("teamsApp");
@@ -70,13 +66,12 @@ function loadVolunteerTeam() {
   });
 }
 
-// Load volunteer's team details and members from Firebase
+// Load volunteers team details and members from Firebase
 function showVolunteerTeam() {
   const teamDiv = document.getElementById("volunteerTeamSection");
   teamDiv.innerHTML = "<div style='color:#888;'>Loading your team info...</div>";
 
   const demoUid = "vol1"; 
-  // Fetch volunteer's team name from Firebase
   profileDb.ref("volunteers/" + demoUid).once("value").then(volSnap => {
     const volData = volSnap.val() || {};
     if (!volData.team) {
@@ -84,7 +79,6 @@ function showVolunteerTeam() {
       return;
     }
     const teamName = volData.team;
-    // Fetch team details from Firebase
     profileDb.ref("teams/" + teamName).once("value").then(teamSnap => {
       const teamData = teamSnap.val();
       if (!teamData) {
@@ -107,14 +101,10 @@ function showVolunteerTeam() {
     });
   });
 }
-
-// Call on page load (for demo, not on auth)
 showVolunteerTeam();
 
 // --- Available Resources Section ---
 const resourcesDb = profileApp.database();
-
-// Add more resource rows on + icon click
 document.addEventListener("click", function(e) {
   if (e.target.closest(".addResourceBtn")) {
     e.preventDefault();
@@ -172,7 +162,6 @@ document.getElementById("resourceForm").onsubmit = function(e) {
   resourcesDb.ref("resources").push(resourceData, function(err) {
     if (!err) {
       document.getElementById("resourceForm").reset();
-      // Remove extra rows except the first
       const resourceInputs = document.getElementById("resourceInputs");
       while (resourceInputs.childElementCount > 1) {
         resourceInputs.removeChild(resourceInputs.lastChild);
@@ -244,18 +233,17 @@ function renderReports(type, containerId) {
 renderReports("sos", "sosReportsContainer");
 renderReports("missing", "missingReportsContainer");
 
-// Logout button logic
+// Logout button 
 document.getElementById("logoutBtn").onclick = function() {
   window.location.href = "../index.html";
 };
 
-// Profile popup logic
+// Profile popup 
 const profilePopup = document.getElementById("profilePopup");
 const profilePopupClose = document.getElementById("profilePopupClose");
 document.getElementById("profileIconBtn").onclick = function(e) {
   e.preventDefault();
   if (profilePopup) profilePopup.style.display = "flex";
-  // Fetch and show profile data
   if (profileAuth.currentUser) {
     const uid = profileAuth.currentUser.uid;
     const ref = profileDb.ref("volunteers/" + uid);
@@ -279,13 +267,11 @@ window.onclick = function(e) {
   }
 };
 
-// --- Assigned Tasks: Load and Save to Firebase codes---
 const tasksDb = profileApp.database();
 
 let assignedTasks = [];
 let performanceStats = { completed: 0, helped: 0, badges: [] };
 
-// Load assigned tasks from Firebase
 function loadAssignedTasks() {
   const uid = "vol1"; 
   tasksDb.ref("assignedTasks/" + uid).on("value", function(snapshot) {
@@ -298,7 +284,6 @@ function loadAssignedTasks() {
   });
 }
 
-// Save task status update to Firebase
 function updateTaskStatus(taskId, newStatus) {
   const uid = "vol1";
   const task = assignedTasks.find(t => t.id === taskId);
@@ -308,7 +293,6 @@ function updateTaskStatus(taskId, newStatus) {
   }
 }
 
-// Render assigned tasks
 function renderAssignedTasks() {
   const container = document.getElementById("assignedTasksList");
   if (!container) return;
@@ -338,7 +322,7 @@ function renderAssignedTasks() {
   });
 }
 
-// Task progress update logic
+// Task progress update 
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("start-btn")) {
     updateTaskStatus(e.target.dataset.id, "In Progress");
@@ -351,7 +335,7 @@ document.addEventListener("click", function(e) {
   }
 });
 
-// --- Performance Tracker: Load from Firebase ---
+// --- Performance Tracker
 function loadPerformanceStats() {
   const uid = "vol1";
   tasksDb.ref("performance/" + uid).on("value", function(snapshot) {
@@ -367,7 +351,6 @@ function renderPerformanceStats() {
   document.getElementById("badgesEarned").textContent = performanceStats.badges.join(", ");
 }
 
-// --- Resource Request Form: Store in Firebase ---
 document.getElementById("resourceRequestForm").onsubmit = function(e) {
   e.preventDefault();
   const type = document.getElementById("requestResourceType").value.trim();
@@ -377,7 +360,6 @@ document.getElementById("resourceRequestForm").onsubmit = function(e) {
     document.getElementById("resourceRequestStatus").textContent = "Please fill all fields.";
     return;
   }
-  // Store request in Firebase
   tasksDb.ref("resourceRequests").push({
     type,
     quantity: qty,
@@ -392,7 +374,6 @@ document.getElementById("resourceRequestForm").onsubmit = function(e) {
   });
 };
 
-// --- Document Upload Section: Store file metadata in Firebase (demo, no actual file upload) ---
 document.getElementById("documentUploadForm").onsubmit = function(e) {
   e.preventDefault();
   const fileInput = document.getElementById("taskProofFile");
@@ -400,7 +381,6 @@ document.getElementById("documentUploadForm").onsubmit = function(e) {
     document.getElementById("uploadStatus").textContent = "Please select a file.";
     return;
   }
-  // Store file info in Firebase (simulate upload)
   const file = fileInput.files[0];
   tasksDb.ref("taskProofUploads").push({
     name: file.name,
@@ -416,7 +396,7 @@ document.getElementById("documentUploadForm").onsubmit = function(e) {
   });
 };
 
-// --- Upcoming Tasks and Alerts: Store in Firebase (optional, fallback to dummy) ---
+// --- upcoming task and Alert store in firebase
 function loadUpcomingTasks() {
   const uid = "vol1";
   tasksDb.ref("upcomingTasks/" + uid).on("value", function(snapshot) {
@@ -425,7 +405,6 @@ function loadUpcomingTasks() {
     if (data) {
       upcomingTasks = Object.values(data);
     } else {
-      // fallback dummy
       upcomingTasks = [
         { title: "Check water supply at Village C", time: "Today 14:00" },
         { title: "Briefing with team lead", time: "Today 16:00" }

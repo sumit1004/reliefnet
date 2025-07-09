@@ -1,4 +1,4 @@
-// Admin Dashboard UI Interactions
+
 document.addEventListener('DOMContentLoaded', function() {
     // Sidebar logic
     const menuToggle = document.getElementById('adminMenuToggle');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Sync active nav-link and sidebar-link
+
     function setActiveNav(hash) {
         document.querySelectorAll('.nav-link').forEach(function(l) {
             l.classList.remove('active');
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Logout button logic for both desktop and sidebar
+
     function adminLogout() {
         window.location.href = "../index.html";
     }
@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Firebase SOS Section ===
     if (typeof firebase !== "undefined") {
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCtbphQnrs9-GRWU-rXV29ryfOo4nRwVOs",
             authDomain: "reliefnet-ca9c3.firebaseapp.com",
@@ -75,13 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
             appId: "1:511314183423:web:d419ebe1a552b393b1f8ca",
             measurementId: "G-G89QL5968J"
         };
-        // Initialize Firebase only if not already initialized
+
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-
-        // Fetch and display SOS submissions
         function renderSOS(sosData) {
             const sosList = document.getElementById('sosList');
             if (!sosList) return;
@@ -130,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Firebase Missing Section ===
     if (typeof firebase !== "undefined") {
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCtbphQnrs9-GRWU-rXV29ryfOo4nRwVOs",
             authDomain: "reliefnet-ca9c3.firebaseapp.com",
@@ -141,13 +137,10 @@ document.addEventListener('DOMContentLoaded', function() {
             appId: "1:511314183423:web:d419ebe1a552b393b1f8ca",
             measurementId: "G-G89QL5968J"
         };
-        // Initialize Firebase only if not already initialized
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
-
-        // Fetch and display Missing submissions
         function renderMissing(missingData) {
             const missingList = document.getElementById('missingList');
             if (!missingList) return;
@@ -211,7 +204,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // === Firebase Volunteer Section ===
-    // Use a separate Firebase app for volunteers
     if (typeof firebase !== "undefined") {
         const volunteerConfig = {
             apiKey: "AIzaSyB--dzAihIn7xoGBHpPYHFDxd5cwJGhNLc",
@@ -268,8 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             table += '</tbody></table>';
             volunteerList.innerHTML = table;
-
-            // Add event listeners for view buttons
             document.querySelectorAll('.volunteer-view-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
@@ -277,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Add event listeners for assign buttons
+
             document.querySelectorAll('.volunteer-assign-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
@@ -298,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'flex';
         }
 
-        // Close modal logic
+        // Close 
         const closeBtn = document.getElementById('closeVolunteerModal');
         const modal = document.getElementById('volunteerModal');
         if (closeBtn && modal) {
@@ -315,9 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // === Firebase Team Section (Import all team data and show member count) ===
     if (typeof firebase !== "undefined") {
-        // Use a separate Firebase app for teams if not already initialized
         let teamApp;
         if (!firebase.apps.some(app => app.name === "teamApp")) {
             teamApp = firebase.initializeApp({
@@ -387,8 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             table += '</tbody></table>';
             teamList.innerHTML = table;
-
-            // Add modal for viewing all team data
             if (!document.getElementById('teamModal')) {
                 const modalDiv = document.createElement('div');
                 modalDiv.id = 'teamModal';
@@ -430,7 +416,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Add event listeners for assign buttons in team section
             document.querySelectorAll('.team-assign-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
@@ -439,9 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Assignment Modal (shared for volunteer/team)
         function openAssignModal(type, key, data) {
-            // Create modal if not exists
             let modal = document.getElementById('assignModal');
             if (!modal) {
                 modal = document.createElement('div');
@@ -462,18 +445,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 document.body.appendChild(modal);
             }
-            // Show modal
+            // Show 
             modal.style.display = 'flex';
             document.getElementById('assignTask').value = '';
             document.getElementById('assignStatus').innerText = '';
-            // Close logic
+            // Close 
             document.getElementById('closeAssignModal').onclick = () => { modal.style.display = 'none'; };
             window.onclick = function(event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
             };
-            // Submit logic
+            // Submit l
             document.getElementById('assignForm').onsubmit = function(e) {
                 e.preventDefault();
                 const task = document.getElementById('assignTask').value.trim();
@@ -492,7 +475,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         document.getElementById('assignStatus').innerText = 'Work assigned successfully!';
                         setTimeout(() => { modal.style.display = 'none'; }, 1200);
-                        // Refresh the table after assignment
                         if (type === 'volunteer') {
                             let volunteerApp = firebase.app("volunteerApp");
                             volunteerApp.database().ref('volunteers').once('value', snap => {
@@ -516,7 +498,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Firebase Resources Section ===
     if (typeof firebase !== "undefined") {
-        // Use a dedicated app for resources with the provided config
         const resourcesConfig = {
             apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
             authDomain: "reliefnet-admin.firebaseapp.com",
@@ -534,13 +515,10 @@ document.addEventListener('DOMContentLoaded', function() {
             resourcesApp = firebase.app("resourcesApp");
         }
         const resourcesDb = resourcesApp.database();
-
-        // Add Resource Form Logic
         const addResourceForm = document.getElementById('addResourceForm');
         if (addResourceForm) {
             addResourceForm.onsubmit = function(e) {
                 e.preventDefault();
-                // Removed name field
                 const type = document.getElementById('resourceType').value.trim();
                 const quantity = parseInt(document.getElementById('resourceQuantity').value, 10);
                 const location = document.getElementById('resourceLocation').value.trim();
@@ -611,16 +589,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Map & Relief Centers Section ===
     if (typeof firebase !== "undefined") {
-        // Use the resourcesApp for map data as well
         let mapDb;
         if (firebase.apps.some(app => app.name === "resourcesApp")) {
             mapDb = firebase.app("resourcesApp").database();
         } else {
-            // fallback: use default app
+
             mapDb = firebase.database();
         }
 
-        // Initialize Leaflet map
+
         let map, markerLayer;
         function initMap() {
             if (document.getElementById('map')) {
@@ -630,22 +607,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).addTo(map);
                 markerLayer = L.layerGroup().addTo(map);
 
-                // Click to fill lat/lng
+
                 map.on('click', function(e) {
                     document.getElementById('locationLat').value = e.latlng.lat.toFixed(6);
                     document.getElementById('locationLng').value = e.latlng.lng.toFixed(6);
                 });
             }
         }
-        setTimeout(initMap, 400); // Wait for DOM
+        setTimeout(initMap, 400); 
 
-        // Add Location Form Logic
+
         const addLocationForm = document.getElementById('addLocationForm');
         if (addLocationForm) {
             addLocationForm.onsubmit = function(e) {
                 e.preventDefault();
                 const type = document.getElementById('locationType').value;
-                // Removed name field
+
                 const address = document.getElementById('locationAddress').value.trim();
                 const lat = parseFloat(document.getElementById('locationLat').value);
                 const lng = parseFloat(document.getElementById('locationLng').value);
@@ -673,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
 
-        // Render locations on map and in list
+
         function renderLocations(locations) {
             const listDiv = document.getElementById('locationsList');
             if (markerLayer) markerLayer.clearLayers();
@@ -692,7 +669,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${loc.lng}</td>
                     <td>${loc.createdAt ? new Date(loc.createdAt).toLocaleString() : ''}</td>
                 </tr>`;
-                // Add marker to map
                 if (markerLayer && map) {
                     const icon = L.icon({
                         iconUrl:
@@ -783,7 +759,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Donations Section ===
     if (typeof firebase !== "undefined") {
-        // Admin donations from resourcesApp
         let adminDonationsDb;
         if (firebase.apps.some(app => app.name === "resourcesApp")) {
             adminDonationsDb = firebase.app("resourcesApp").database();
@@ -791,14 +766,13 @@ document.addEventListener('DOMContentLoaded', function() {
             adminDonationsDb = firebase.database();
         }
 
-        // NGO donations from ngoApp
+
         let ngoDonationsDb;
         if (firebase.apps.some(app => app.name === "ngoApp")) {
             ngoDonationsDb = firebase.app("ngoApp").database();
         }
 
-        // --- DUMMY DATA INSERTION (only if no data exists) ---
-        // Admin dummy donations
+
         adminDonationsDb.ref('donations').once('value', snap => {
             if (!snap.exists()) {
                 adminDonationsDb.ref('donations').push({
@@ -820,7 +794,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // NGO dummy donations (for first 2 NGOs found)
         if (ngoDonationsDb) {
             ngoDonationsDb.ref('ngos').once('value', snap => {
                 const ngos = snap.val();
@@ -855,7 +828,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
-        // --- END DUMMY DATA ---
 
         function renderDonations(adminDonations, ngoDonations) {
             const donationList = document.getElementById('donationList');
@@ -927,12 +899,9 @@ document.addEventListener('DOMContentLoaded', function() {
             donationList.innerHTML = html;
         }
 
-        // Fetch both admin and NGO donations and render together
         function fetchAndRenderDonations() {
-            // Fetch admin donations
             adminDonationsDb.ref('donations').once('value', adminSnap => {
-                const adminDonations = adminSnap.val();
-                // Fetch all NGOs and their donations
+                const adminDonations = adminSnap.val();  
                 if (ngoDonationsDb) {
                     ngoDonationsDb.ref('ngos').once('value', ngoSnap => {
                         const ngos = ngoSnap.val();
@@ -944,7 +913,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Initial fetch and on change
+  
         if (adminDonationsDb) {
             adminDonationsDb.ref('donations').on('value', fetchAndRenderDonations);
         }

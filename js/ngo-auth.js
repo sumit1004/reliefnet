@@ -1,6 +1,4 @@
 
-
-// Firebase config for NGO
 const ngoFirebaseConfig = {
     apiKey: "AIzaSyBB7xNTgCBvCm4UdEq4CwJLrdoDzjLfGXU",
     authDomain: "reliefnet-ngo.firebaseapp.com",

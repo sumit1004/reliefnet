@@ -524,7 +524,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// --- Login with Mobile Number and OTP  ---
 if (loginWithMobileBtn && loginMobileInput) {
     loginWithMobileBtn.addEventListener('click', function () {
         if (mobileLoginError) mobileLoginError.textContent = '';
@@ -534,7 +533,6 @@ if (loginWithMobileBtn && loginMobileInput) {
             mobileLoginError.textContent = "Please enter a valid 10-digit mobile number.";
             return;
         }
-        // Setup reCAPTCHA
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                 size: 'invisible',
@@ -542,7 +540,6 @@ if (loginWithMobileBtn && loginMobileInput) {
             });
         }
         const appVerifier = window.recaptchaVerifier;
-        // Send OTP
         firebase.auth().signInWithPhoneNumber("+91" + mobile, appVerifier)
             .then(function(result) {
                 confirmationResult = result;
@@ -572,7 +569,6 @@ if (verifyOtpBtn && loginOtpInput) {
         }
         confirmationResult.confirm(otp)
             .then(function(result) {
-                // User signed in successfully.
                 if (mobileLoginSuccess) mobileLoginSuccess.style.display = 'block';
                 setTimeout(() => {
                     if (mobileLoginModal) mobileLoginModal.classList.remove('active');
