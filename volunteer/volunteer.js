@@ -433,96 +433,94 @@ loadPerformanceStats();
 loadUpcomingTasks();
 
 // --- Map Section: Show Nearby Shelters, Medical Camps, Food Centers ---
-(function() {
-  const reliefConfig = {
-    apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
-    authDomain: "reliefnet-admin.firebaseapp.com",
-    databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
-    projectId: "reliefnet-admin",
-    storageBucket: "reliefnet-admin.firebasestorage.app",
-    messagingSenderId: "76512879742",
-    appId: "1:76512879742:web:9a834f2991c0b09198a42f",
-    measurementId: "G-6W1RHH9L62"
-  };
-  let reliefApp;
-  if (!firebase.apps.some(app => app.name === "reliefCentersApp")) {
-    reliefApp = firebase.initializeApp(reliefConfig, "reliefCentersApp");
-  } else {
-    reliefApp = firebase.app("reliefCentersApp");
-  }
-  const reliefDb = reliefApp.database();
+const reliefCentersConfig = {
+  apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+  authDomain: "reliefnet-admin.firebaseapp.com",
+  databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+  projectId: "reliefnet-admin",
+  storageBucket: "reliefnet-admin.firebasestorage.app",
+  messagingSenderId: "76512879742",
+  appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+  measurementId: "G-6W1RHH9L62"
+};
 
-  let map, markerLayer, centersData = [];
-  let mapInitialized = false;
+let reliefCentersApp;
+try {
+  reliefCentersApp = firebase.app("reliefCentersApp");
+} catch {
+  reliefCentersApp = firebase.initializeApp(reliefCentersConfig, "reliefCentersApp");
+}
+const reliefCentersDb = reliefCentersApp.database();
 
-  function initMap() {
-    if (mapInitialized) return;
-    const mapDiv = document.getElementById('reliefMap');
-    if (!mapDiv) return;
-    map = L.map(mapDiv).setView([21.1938, 81.3509], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    markerLayer = L.layerGroup().addTo(map);
-    mapInitialized = true;
-  }
+let map, markers = [], reliefCentersData = { shelter: [], medical: [], food: [] };
 
-  function fetchCenters() {
-    reliefDb.ref('reliefcenters').on('value', snap => {
-      const data = snap.val();
-      centersData = [];
-      if (data) {
-        Object.values(data).forEach(center => {
-          if (center.type && center.lat && center.lng) {
-            centersData.push(center);
-          }
-        });
-      }
-      showCenters('shelter');
+function initReliefMap() {
+  map = new google.maps.Map(document.getElementById("reliefMap"), {
+    center: { lat: 22.9734, lng: 78.6569 },
+    zoom: 5,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false
+  });
+  reliefCentersDb.ref("reliefcenters").once("value").then(snap => {
+    const data = snap.val() || {};
+    reliefCentersData = { shelter: [], medical: [], food: [] };
+    Object.values(data).forEach(center => {
+      if (!center.type || !center.lat || !center.lng) return;
+      if (center.type.toLowerCase() === "shelter") reliefCentersData.shelter.push(center);
+      if (center.type.toLowerCase() === "medical") reliefCentersData.medical.push(center);
+      if (center.type.toLowerCase() === "food") reliefCentersData.food.push(center);
     });
-  }
+    showCentersOnMap("shelter");
+  });
+}
 
-  function showCenters(type) {
-    if (!markerLayer) return;
-    markerLayer.clearLayers();
-    let typeLabel = '';
-    let iconUrl = '';
-    if (type === 'shelter') {
-      typeLabel = 'shelter';
-      iconUrl = "https://cdn-icons-png.flaticon.com/512/69/69524.png";
-    } else if (type === 'medical') {
-      typeLabel = 'medical';
-      iconUrl = "https://cdn-icons-png.flaticon.com/512/2965/2965567.png";
-    } else if (type === 'food') {
-      typeLabel = 'food';
-      iconUrl = "https://cdn-icons-png.flaticon.com/512/1046/1046784.png";
-    }
-    centersData.forEach(center => {
-      if (center.type && center.type.toLowerCase() === typeLabel) {
-        const marker = L.marker([center.lat, center.lng], {
-          icon: L.icon({
-            iconUrl: iconUrl,
-            iconSize: [28, 28],
-            iconAnchor: [14, 28],
-            popupAnchor: [0, -28]
-          })
-        }).addTo(markerLayer);
-        marker.bindPopup(`<b>${center.type}</b><br>${center.address || ''}`);
-      }
+function showCentersOnMap(type) {
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+  const centers = reliefCentersData[type] || [];
+  if (!map) return;
+  if (!centers.length) {
+    document.getElementById("mapInfo").textContent = "No locations found for this category.";
+    return;
+  }
+  let bounds = new google.maps.LatLngBounds();
+  centers.forEach(center => {
+    let marker = new google.maps.Marker({
+      position: { lat: Number(center.lat), lng: Number(center.lng) },
+      map,
+      title: center.name || "",
+      icon: type === "shelter"
+        ? "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        : type === "medical"
+        ? "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+        : "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
     });
-  }
+    marker.addListener("click", () => {
+      document.getElementById("mapInfo").innerHTML = `<b>${center.name || ""}</b><br>${center.address || ""}`;
+    });
+    markers.push(marker);
+    bounds.extend(marker.getPosition());
+  });
+  map.fitBounds(bounds);
+  document.getElementById("mapInfo").textContent = "";
+}
 
-  function setupMapFilters() {
-    const mapSection = document.querySelector('.map-section');
-    if (!mapSection) return;
-    mapSection.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("map-filter-btn")) {
+    let type = e.target.getAttribute("data-type");
+    showCentersOnMap(type);
+    document.querySelectorAll(".map-filter-btn").forEach(btn => btn.classList.remove("active"));
+    e.target.classList.add("active");
+  }
+});
+
+// Make initReliefMap globally accessible for Google Maps callback
+window.initReliefMap = initReliefMap;
         mapSection.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         showCenters(this.getAttribute('data-type'));
-      });
-    });
-  }
+
 
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
@@ -531,4 +529,4 @@ loadUpcomingTasks();
       setupMapFilters();
     }, 500);
   });
-})();
+
