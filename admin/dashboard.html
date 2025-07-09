@@ -1,25 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Volunteer Dashboard | ReliefNet</title>
-  <link rel="stylesheet" href="admin.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReliefNet Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
-    
-  <h2>Coming soon</h2>
+    <header class="admin-header">
+        <div class="admin-header-inner">
+            <div class="admin-logo">
+                <i class="fa fa-handshake-o"></i> ReliefNet
+            </div>
+            <nav class="admin-nav" id="adminNav">
+                <button id="adminLogoutBtn" class="admin-logout-btn" title="Logout">
+                    <i class="fa fa-sign-out"></i> Logout
+                </button>
+            </nav>
+            <button id="adminMenuToggle" class="admin-menu-toggle" aria-label="Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title"><i class="fa fa-handshake-o"></i> ReliefNet</span>
+            <button id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="Close Sidebar">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <button id="sidebarLogoutBtn" class="sidebar-logout-btn">
+                <i class="fa fa-sign-out"></i> Logout
+            </button>
+        </nav>
+    </aside>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- SOS Section  -->
+    <section id="sosSection" class="admin-sos-section">
+        <h2>SOS Submissions</h2>
+        <div id="sosList" class="sos-list">
+
+        </div>
+    </section>
 
 
+    <!-- Missing Section  -->
+    <section id="missingSection" class="admin-missing-section">
+        <h2>Missing Submissions</h2>
+        <div id="missingList" class="missing-list">
 
-  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database-compat.js"></script>
-  <script src="admin.js"></script>
+        </div>
+    </section>
+
+
+    <!-- Volunteer Section-->
+    <section id="volunteerSection" class="admin-volunteer-section">
+        <h2>Volunteers</h2>
+        <div id="volunteerList" class="volunteer-list">
+        
+        </div>
+    </section>
+ 
+
+    <!-- Volunteer Detail  -->
+    <div id="volunteerModal" class="volunteer-modal" style="display:none;">
+        <div class="volunteer-modal-content">
+            <span id="closeVolunteerModal" class="close-volunteer-modal">&times;</span>
+            <h3>Volunteer Details</h3>
+            <div id="volunteerDetailContent">
+
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="admin-footer">
+        <div class="admin-footer-inner">
+            &copy; 2025 ReliefNet Admin. All rights reserved.
+        </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="admin.js"></script>
 </body>
+
 </html>
-  
-
-
-
