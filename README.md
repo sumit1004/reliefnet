@@ -30,6 +30,11 @@ Only selected users get access to the admin dashboard. Admin accounts are not op
 Donation System
 Anyone can donate through the website. Donors can choose to support a specific NGO or the overall admin-managed relief fund. The donation section shows all donation history clearly, including the name of the donor, the amount, the receiver (NGO or admin), and the date and time. This ensures complete transparency and trust
 
+### 🚀 Live Demo
+
+[View the live website here](https://reliefnett.netlify.app/)
+
+
 Project Folder Structure
 ``` 
 RELIEFNET/
@@ -94,6 +99,9 @@ index.html: Entry point or main page for GitHub Pages hosting.
 README.md: Complete project documentation.
 
 .gitattributes & pptx file: Project-level files for Git settings and hackathon presentation.
+
+
+
 
 
 Checkpoints Explanation
