@@ -112,3 +112,7 @@ This checkpoint makes the Volunteer Dashboard fully functional and ready for pra
 
 Checkpoint 7: Admin Login and Authentication (Completed)
 In this checkpoint, I added the login form for the admin panel and completed the full authentication process for admin users. I also tested all login functionalities to make sure data is being stored and verified properly in the database. During this commit, I checked that all login data flows work correctly and confirmed that the system is storing and retrieving information as expected without any errors. This ensures that only authorized admins can access the dashboard securely.
+
+
+Day 2, Checkpoint 1: Admin Dashboard Data Integration
+In this checkpoint, I added all the necessary sections to the admin dashboard, including the SOS section, missing reports section, and volunteer management section. I also tested the database connections to make sure that all data is properly imported from Firebase to the admin dashboard. Everything is now working as expected, and the data displays correctly in each section, allowing the admin to easily monitor and manage reports and volunteers in real time.
