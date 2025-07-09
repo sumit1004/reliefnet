@@ -355,7 +355,7 @@ html, body {
     font-size: 15px;
 }
 
-/* Missing Table */
+/* Missing Table Styles */
 .missing-table {
     width: 100%;
     border-collapse: collapse;
@@ -382,7 +382,7 @@ html, body {
     font-size: 15px;
 }
 
-/* Volunteer Table */
+/* Volunteer Table Styles */
 .volunteer-table {
     width: 100%;
     border-collapse: collapse;
@@ -422,7 +422,7 @@ html, body {
     background: #1746a2;
 }
 
-/* Volunteer*/
+/* Volunteer Modal Styles */
 .volunteer-modal {
     display: none;
     position: fixed;
@@ -460,66 +460,72 @@ html, body {
     color: #2563eb;
 }
 
+/* Team Table Styles */
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.team-table th,
+.team-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 12px;
+    text-align: left;
+    word-break: break-word;
+    max-width: 180px;
+}
+.team-table th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+.team-table tr:nth-child(even) {
+    background: #fafafa;
+}
+.team-table td {
+    font-size: 15px;
+}
 
-.sos-list, .missing-list, .volunteer-list {
+/* Responsive Table Wrapper for Team */
+.team-list {
     width: 100%;
     overflow-x: auto;
 }
 
-
-.sos-table,
-.missing-table,
-.volunteer-table {
-    min-width: 700px;
-    max-width: none;
-}
-
-
+/* Responsive for Team Table */
 @media (max-width: 800px) {
-    .sos-table,
-    .missing-table,
-    .volunteer-table {
+    .team-table {
         font-size: 15px;
         min-width: 700px;
     }
-    .sos-table th, .sos-table td,
-    .missing-table th, .missing-table td,
-    .volunteer-table th, .volunteer-table td {
+    .team-table th, .team-table td {
         padding: 10px 8px;
         max-width: 180px;
     }
 }
-
 @media (max-width: 600px) {
-    .sos-table,
-    .missing-table,
-    .volunteer-table {
+    .team-table {
         font-size: 14px;
         min-width: 700px;
     }
-    .sos-table th, .sos-table td,
-    .missing-table th, .missing-table td,
-    .volunteer-table th, .volunteer-table td {
+    .team-table th, .team-table td {
         padding: 9px 6px;
         max-width: 140px;
     }
 }
-
 @media (max-width: 480px) {
-    .sos-table,
-    .missing-table,
-    .volunteer-table {
+    .team-table {
         min-width: 700px;
     }
-    .sos-table th, .sos-table td,
-    .missing-table th, .missing-table td,
-    .volunteer-table th, .volunteer-table td {
+    .team-table th, .team-table td {
         font-size: 13px;
         padding: 8px 4px;
         max-width: 100px;
     }
 }
 
+/* Optional: Make modal content fit small screens */
 @media (max-width: 500px) {
     .volunteer-modal-content {
         padding: 1em 0.5em 1em 0.5em;
@@ -530,7 +536,7 @@ html, body {
     }
 }
 
-
+/* Optional: Section spacing for mobile */
 @media (max-width: 600px) {
     .admin-sos-section,
     .admin-missing-section,

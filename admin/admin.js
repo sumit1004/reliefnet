@@ -245,6 +245,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <th>Name</th>
                         <th>Team</th>
                         <th>Action</th>
+                        <th>Assign Work</th>
+                        <th>Assigned Work</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -257,6 +259,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>
                             <button class="volunteer-view-btn" data-key="${key}">View Details</button>
                         </td>
+                        <td>
+                            <button class="volunteer-assign-btn" data-key="${key}">Assign Work</button>
+                        </td>
+                        <td>${v.assignedWork ? v.assignedWork : 'Not Assigned'}</td>
                     </tr>
                 `;
             });
@@ -268,6 +274,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.addEventListener('click', function() {
                     const key = this.getAttribute('data-key');
                     showVolunteerDetail(volunteers[key]);
+                });
+            });
+
+            // Add event listeners for assign buttons
+            document.querySelectorAll('.volunteer-assign-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    openAssignModal('volunteer', key, volunteers[key]);
                 });
             });
         }
@@ -300,5 +314,263 @@ document.addEventListener('DOMContentLoaded', function() {
             renderVolunteers(snapshot.val());
         });
     }
-});
 
+    // === Firebase Team Section (Import all team data and show member count) ===
+    if (typeof firebase !== "undefined") {
+        // Use a separate Firebase app for teams if not already initialized
+        let teamApp;
+        if (!firebase.apps.some(app => app.name === "teamApp")) {
+            teamApp = firebase.initializeApp({
+                apiKey: "AIzaSyB--dzAihIn7xoGBHpPYHFDxd5cwJGhNLc",
+                authDomain: "reliefnet-volunteer.firebaseapp.com",
+                databaseURL: "https://reliefnet-volunteer-default-rtdb.firebaseio.com",
+                projectId: "reliefnet-volunteer",
+                storageBucket: "reliefnet-volunteer.firebasestorage.app",
+                messagingSenderId: "207099035894",
+                appId: "1:207099035894:web:245fc66d81a73b5de96cd7",
+                measurementId: "G-3V4EJMLYFX"
+            }, "teamApp");
+        } else {
+            teamApp = firebase.app("teamApp");
+        }
+        const teamDb = teamApp.database();
+
+        function renderTeamsAllData(teams) {
+            const teamList = document.getElementById('teamList');
+            if (!teamList) return;
+            teamList.innerHTML = '';
+            if (!teams) {
+                teamList.innerHTML = '<p>No teams found.</p>';
+                return;
+            }
+            let table = `<table class="team-table">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Assigned Place</th>
+                        <th>Assigned Members</th>
+                        <th>Members Count</th>
+                        <th>All Data</th>
+                        <th>Assign Work</th>
+                        <th>Assigned Work</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            Object.entries(teams).reverse().forEach(([key, team]) => {
+                let membersCount = 0;
+                let membersList = '';
+                if (team.members && typeof team.members === 'object') {
+                    if (Array.isArray(team.members)) {
+                        membersCount = team.members.length;
+                        membersList = team.members.join(', ');
+                    } else {
+                        membersCount = Object.keys(team.members).length;
+                        membersList = Object.values(team.members).join(', ');
+                    }
+                }
+                table += `
+                    <tr>
+                        <td>${team.name || key || 'N/A'}</td>
+                        <td>${team.place ? team.place : 'Not Assigned'}</td>
+                        <td>${team.assignedMembers ? team.assignedMembers : (membersList || 'N/A')}</td>
+                        <td>${membersCount}</td>
+                        <td>
+                            <button class="team-view-btn" data-key="${key}">View All</button>
+                        </td>
+                        <td>
+                            <button class="team-assign-btn" data-key="${key}">Assign Work</button>
+                        </td>
+                        <td>${team.assignedWork ? team.assignedWork : 'Not Assigned'}</td>
+                    </tr>
+                `;
+            });
+            table += '</tbody></table>';
+            teamList.innerHTML = table;
+
+            // Add modal for viewing all team data
+            if (!document.getElementById('teamModal')) {
+                const modalDiv = document.createElement('div');
+                modalDiv.id = 'teamModal';
+                modalDiv.className = 'volunteer-modal';
+                modalDiv.style.display = 'none';
+                modalDiv.innerHTML = `
+                    <div class="volunteer-modal-content">
+                        <span id="closeTeamModal" class="close-volunteer-modal">&times;</span>
+                        <h3>Team Details</h3>
+                        <div id="teamDetailContent"></div>
+                    </div>
+                `;
+                document.body.appendChild(modalDiv);
+            }
+            const teamModal = document.getElementById('teamModal');
+            const closeTeamModal = document.getElementById('closeTeamModal');
+            if (closeTeamModal && teamModal) {
+                closeTeamModal.onclick = () => { teamModal.style.display = 'none'; };
+                window.addEventListener('click', function(event) {
+                    if (event.target === teamModal) {
+                        teamModal.style.display = 'none';
+                    }
+                });
+            }
+            document.querySelectorAll('.team-view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    const team = teams[key];
+                    let html = '';
+                    Object.entries(team).forEach(([k, v]) => {
+                        let value = v;
+                        if (typeof v === 'object') {
+                            value = Array.isArray(v) ? v.join(', ') : JSON.stringify(v);
+                        }
+                        html += `<div><strong>${k.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value || 'N/A'}</div>`;
+                    });
+                    document.getElementById('teamDetailContent').innerHTML = html;
+                    document.getElementById('teamModal').style.display = 'flex';
+                });
+            });
+
+            // Add event listeners for assign buttons in team section
+            document.querySelectorAll('.team-assign-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const key = this.getAttribute('data-key');
+                    openAssignModal('team', key, teams[key]);
+                });
+            });
+        }
+
+        // Assignment Modal (shared for volunteer/team)
+        function openAssignModal(type, key, data) {
+            // Create modal if not exists
+            let modal = document.getElementById('assignModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'assignModal';
+                modal.className = 'volunteer-modal';
+                modal.style.display = 'none';
+                modal.innerHTML = `
+                    <div class="volunteer-modal-content">
+                        <span id="closeAssignModal" class="close-volunteer-modal">&times;</span>
+                        <h3>Assign Work</h3>
+                        <form id="assignForm">
+                            <label for="assignTask">Task/Work:</label>
+                            <input type="text" id="assignTask" name="assignTask" required style="width:95%;margin-bottom:1em;">
+                            <button type="submit" class="volunteer-view-btn" style="margin-top:0.5em;">Assign</button>
+                        </form>
+                        <div id="assignStatus" style="margin-top:1em;color:#2563eb;"></div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+            // Show modal
+            modal.style.display = 'flex';
+            document.getElementById('assignTask').value = '';
+            document.getElementById('assignStatus').innerText = '';
+            // Close logic
+            document.getElementById('closeAssignModal').onclick = () => { modal.style.display = 'none'; };
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+            // Submit logic
+            document.getElementById('assignForm').onsubmit = function(e) {
+                e.preventDefault();
+                const task = document.getElementById('assignTask').value.trim();
+                if (!task) return;
+                let dbRef;
+                if (type === 'volunteer') {
+                    let volunteerApp = firebase.app("volunteerApp");
+                    dbRef = volunteerApp.database().ref('volunteers/' + key + '/assignedWork');
+                } else if (type === 'team') {
+                    let teamApp = firebase.app("teamApp");
+                    dbRef = teamApp.database().ref('teams/' + key + '/assignedWork');
+                }
+                dbRef.set(task, function(error) {
+                    if (error) {
+                        document.getElementById('assignStatus').innerText = 'Failed to assign work.';
+                    } else {
+                        document.getElementById('assignStatus').innerText = 'Work assigned successfully!';
+                        setTimeout(() => { modal.style.display = 'none'; }, 1200);
+                        // Refresh the table after assignment
+                        if (type === 'volunteer') {
+                            let volunteerApp = firebase.app("volunteerApp");
+                            volunteerApp.database().ref('volunteers').once('value', snap => {
+                                renderVolunteers(snap.val());
+                            });
+                        } else if (type === 'team') {
+                            let teamApp = firebase.app("teamApp");
+                            teamApp.database().ref('teams').once('value', snap => {
+                                renderTeamsAllData(snap.val());
+                            });
+                        }
+                    }
+                });
+            };
+        }
+
+        teamDb.ref('teams').on('value', (snapshot) => {
+            renderTeamsAllData(snapshot.val());
+        });
+    }
+
+    // Assignment Modal (shared for volunteer/team)
+    function openAssignModal(type, key, data) {
+        // Create modal if not exists
+        let modal = document.getElementById('assignModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'assignModal';
+            modal.className = 'volunteer-modal';
+            modal.style.display = 'none';
+            modal.innerHTML = `
+                <div class="volunteer-modal-content">
+                    <span id="closeAssignModal" class="close-volunteer-modal">&times;</span>
+                    <h3>Assign Work</h3>
+                    <form id="assignForm">
+                        <label for="assignTask">Task/Work:</label>
+                        <input type="text" id="assignTask" name="assignTask" required style="width:95%;margin-bottom:1em;">
+                        <button type="submit" class="volunteer-view-btn" style="margin-top:0.5em;">Assign</button>
+                    </form>
+                    <div id="assignStatus" style="margin-top:1em;color:#2563eb;"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        // Show modal
+        modal.style.display = 'flex';
+        document.getElementById('assignTask').value = '';
+        document.getElementById('assignStatus').innerText = '';
+        // Close logic
+        document.getElementById('closeAssignModal').onclick = () => { modal.style.display = 'none'; };
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+        // Submit logic
+        document.getElementById('assignForm').onsubmit = function(e) {
+            e.preventDefault();
+            const task = document.getElementById('assignTask').value.trim();
+            if (!task) return;
+            let dbRef;
+            if (type === 'volunteer') {
+                // Assign to volunteer
+                let volunteerApp = firebase.app("volunteerApp");
+                dbRef = volunteerApp.database().ref('volunteers/' + key + '/assignedWork');
+            } else if (type === 'team') {
+                // Assign to team
+                let teamApp = firebase.app("teamApp");
+                dbRef = teamApp.database().ref('teams/' + key + '/assignedWork');
+            }
+            dbRef.set(task, function(error) {
+                if (error) {
+                    document.getElementById('assignStatus').innerText = 'Failed to assign work.';
+                } else {
+                    document.getElementById('assignStatus').innerText = 'Work assigned successfully!';
+                    setTimeout(() => { modal.style.display = 'none'; }, 1200);
+                }
+            });
+        };
+    }
+});

@@ -42,50 +42,60 @@
     </aside>
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <!-- SOS Section  -->
+    <!-- SOS Section Start -->
     <section id="sosSection" class="admin-sos-section">
         <h2>SOS Submissions</h2>
         <div id="sosList" class="sos-list">
-
+            <!-- SOS entries will be populated here -->
         </div>
     </section>
+    <!-- SOS Section End -->
 
-
-    <!-- Missing Section  -->
+    <!-- Missing Section Start -->
     <section id="missingSection" class="admin-missing-section">
         <h2>Missing Submissions</h2>
         <div id="missingList" class="missing-list">
-
+            <!-- Missing entries will be populated here -->
         </div>
     </section>
+    <!-- Missing Section End -->
 
-
-    <!-- Volunteer Section-->
+    <!-- Volunteer Section Start -->
     <section id="volunteerSection" class="admin-volunteer-section">
         <h2>Volunteers</h2>
         <div id="volunteerList" class="volunteer-list">
-        
+            <!-- Volunteer entries will be populated here -->
         </div>
     </section>
- 
+    <!-- Volunteer Section End -->
 
-    <!-- Volunteer Detail  -->
+    <!-- Team Section Start -->
+    <section id="teamSection" class="admin-team-section">
+        <h2>Teams</h2>
+        <div id="teamList" class="team-list">
+            <!-- Team entries will be populated here -->
+        </div>
+    </section>
+    <!-- Team Section End -->
+
+    <!-- Volunteer Detail Modal -->
     <div id="volunteerModal" class="volunteer-modal" style="display:none;">
         <div class="volunteer-modal-content">
             <span id="closeVolunteerModal" class="close-volunteer-modal">&times;</span>
             <h3>Volunteer Details</h3>
             <div id="volunteerDetailContent">
-
+                <!-- Volunteer details will be shown here -->
             </div>
         </div>
     </div>
-
+    <!-- Volunteer Detail Modal End -->
 
     <footer class="admin-footer">
         <div class="admin-footer-inner">
             &copy; 2025 ReliefNet Admin. All rights reserved.
         </div>
-
+    </footer>
+    <!-- Firebase App (the core Firebase SDK) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="admin.js"></script>
