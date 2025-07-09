@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Dashboard - ReliefNet</title>
+    <link rel="stylesheet" href="ngo.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <header class="ngo-header">
+        <div class="ngo-header-inner">
+            <div class="ngo-logo">ReliefNet NGO Dashboard</div>
+            <button id="ngoLogoutBtn" class="ngo-logout-btn"><i class="fa fa-sign-out"></i>Logout</button>
+        </div>
+    </header>
+    <main class="ngo-main">
+        <h2>Welcome to the NGO Dashboard</h2>
+        <p>This is your dashboard. You can manage your NGO profile and view relief activities here.</p>
+        
+        <!-- Update Profile Button (top right) -->
+        <button id="openProfileModalBtn" class="ngo-update-profile-btn">
+            <i class="fa fa-user"></i> Update Profile
+        </button>
+
+        <!-- NGO Profile Modal Popup -->
+        <div id="ngoProfileModal" class="ngo-modal">
+            <div class="ngo-modal-content">
+                <span class="ngo-modal-close" id="closeProfileModalBtn">&times;</span>
+                <section class="ngo-profile-section">
+                    <h3>NGO Profile</h3>
+                    <form id="ngoProfileForm" class="ngo-profile-form">
+                        <div class="ngo-profile-row">
+                            <label for="ngoName">NGO Name:</label>
+                            <input type="text" id="ngoName" name="ngoName" required>
+                        </div>
+                        <div class="ngo-profile-row">
+                            <label for="ngoEmail">Email:</label>
+                            <input type="email" id="ngoEmail" name="ngoEmail" required>
+                        </div>
+                        <div class="ngo-profile-row">
+                            <label for="ngoPhone">Phone Number:</label>
+                            <input type="tel" id="ngoPhone" name="ngoPhone" required>
+                        </div>
+                        <div class="ngo-profile-row">
+                            <label for="ngoRegNo">Registration Number:</label>
+                            <input type="text" id="ngoRegNo" name="ngoRegNo" required>
+                        </div>
+                        <div class="ngo-profile-row">
+                            <label for="ngoLocation">Location:</label>
+                            <input type="text" id="ngoLocation" name="ngoLocation" required>
+                        </div>
+                        <button type="submit" class="ngo-update-btn"><i class="fa fa-save"></i> Update Profile</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <!-- End NGO Profile Modal Popup -->
+
+    </main>
+    <!-- SOS Reports Section -->
+    <section class="ngo-reports-section">
+        <h3>SOS Requests</h3>
+        <div class="ngo-reports-filters">
+            <input type="text" id="sosFilterLocation" placeholder="Filter by location">
+            <select id="sosFilterUrgency">
+                <option value="">All Urgency</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <select id="sosFilterType">
+                <option value="">All Help Types</option>
+                <option value="Evacuation">Evacuation</option>
+                <option value="Medical">Medical</option>
+                <option value="Food">Food</option>
+                <option value="Rescue">Rescue</option>
+                <!-- Add more as needed -->
+            </select>
+            <button id="applySosFilters" class="ngo-update-btn" style="margin-left:8px;"><i class="fa fa-filter"></i> Filter</button>
+        </div>
+        <div class="ngo-table-responsive">
+            <table class="ngo-sos-table" id="sosReportsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Urgency</th>
+                        <th>Help Types</th>
+                        <th>Details</th>
+                        <th>Timestamp</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sosReportsTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- Missing Reports Section -->
+    <section class="ngo-reports-section">
+        <h3>Missing Person Reports</h3>
+        <div class="ngo-reports-filters">
+            <input type="text" id="missingFilterLocation" placeholder="Filter by city/state/country">
+            <select id="missingFilterUrgency">
+                <option value="">All Urgency</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+            <button id="applyMissingFilters" class="ngo-update-btn" style="margin-left:8px;"><i class="fa fa-filter"></i> Filter</button>
+        </div>
+        <div class="ngo-table-responsive">
+            <table class="ngo-missing-table" id="missingReportsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Aadhar</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Country</th>
+                        <th>Last Seen</th>
+                        <th>Clothes</th>
+                        <th>Father</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="missingReportsTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- Accepted Tasks Section -->
+    <section class="ngo-reports-section">
+        <h3>Accepted Tasks</h3>
+        <div class="ngo-table-responsive">
+            <table class="ngo-sos-table" id="acceptedTasksTable">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Required Resources</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                    </tr>
+                </thead>
+                <tbody id="acceptedTasksTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <footer class="ngo-footer">
+        <div class="ngo-footer-inner">
+            &copy; 2025 ReliefNet NGO. All rights reserved.
+        </div>
+    </footer>
+    <script src="ngo.js"></script>
+</body>
+</html>

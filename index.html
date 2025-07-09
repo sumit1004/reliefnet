@@ -313,7 +313,7 @@
     
     <!-- Add Admin Login Modal -->
     <div id="adminLoginModal" class="howitworks" style="display:none;">
-        <div class="howitworks-content login-modal-content">
+        <div class="howitworks-content login-modal-content left">
             <span class="howitworks-close" id="adminLoginClose">&times;</span>
             <h2 class="login-title">Admin Login</h2>
             <form id="adminLoginForm" class="login-form">
@@ -328,6 +328,54 @@
         </div>
     </div>
 
+    <!-- Add NGO Login Modal -->
+    <div id="ngoLoginModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content login-modal-content left">
+            <span class="howitworks-close" id="ngoLoginClose">&times;</span>
+            <h2 class="login-title">NGO Login</h2>
+            <form id="ngoLoginForm" class="login-form">
+                <label for="ngoLoginEmail">Email</label>
+                <input type="email" id="ngoLoginEmail" required>
+                <label for="ngoLoginPassword">Password</label>
+                <input type="password" id="ngoLoginPassword" required>
+                <button type="submit" class="btn btn-primary login-submit-btn">Login</button>
+                <div id="ngoLoginError" class="login-error"></div>
+            </form>
+            <div id="ngoLoginSuccess" class="login-success">Login successful!</div>
+            <div class="login-bottom-link">
+                <a href="#" id="showNgoSignup">Don't have an account? Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add NGO Signup Modal -->
+    <div id="ngoSignupModal" class="howitworks" style="display:none;">
+        <div class="howitworks-content signup-modal-content left signup-modal-scroll" style="max-height: 90vh; overflow-y: auto;">
+            <span class="howitworks-close" id="ngoSignupClose">&times;</span>
+            <h2 class="signup-title">NGO Sign Up</h2>
+            <form id="ngoSignupForm" class="signup-form">
+                <label for="ngoSignupName">NGO Name</label>
+                <input type="text" id="ngoSignupName" required>
+                <label for="ngoSignupEmail">Email</label>
+                <input type="email" id="ngoSignupEmail" required>
+                <label for="ngoSignupPassword">Password</label>
+                <input type="password" id="ngoSignupPassword" required>
+                <label for="ngoSignupContact">Contact Number</label>
+                <input type="tel" id="ngoSignupContact" maxlength="15" required>
+                <label for="ngoSignupAddress">Address</label>
+                <textarea id="ngoSignupAddress" rows="2" required></textarea>
+                <label for="ngoSignupReg">Registration Number</label>
+                <input type="text" id="ngoSignupReg" required>
+                <button type="submit" class="btn btn-primary signup-submit-btn">Sign Up</button>
+                <div id="ngoSignupError" class="signup-error"></div>
+            </form>
+            <div id="ngoSignupSuccess" class="signup-success">Signup successful! You can now log in.</div>
+            <div class="signup-bottom-link">
+                <a href="#" id="showNgoLogin">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -335,6 +383,7 @@
 <script src="js/admin-auth.js"></script>
     <script src="script.js"></script>
     <script src="js/volunteer-firebase.js"></script>
+    <script src="js/ngo-auth.js"></script>
 
 <script>
 
@@ -353,6 +402,20 @@
         const volunteerSignupModal = document.getElementById('volunteerSignupModal');
         const volunteerSignupClose = document.getElementById('volunteerSignupClose');
         const showVolunteerLogin = document.getElementById('showVolunteerLogin');
+
+    // Admin modal elements
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginModal = document.getElementById('adminLoginModal');
+        const adminLoginClose = document.getElementById('adminLoginClose');
+
+        // NGO modal elements
+        const ngoLoginBtn = document.getElementById('ngoLoginBtn');
+        const ngoLoginModal = document.getElementById('ngoLoginModal');
+        const ngoLoginClose = document.getElementById('ngoLoginClose');
+        const showNgoSignup = document.getElementById('showNgoSignup');
+        const ngoSignupModal = document.getElementById('ngoSignupModal');
+        const ngoSignupClose = document.getElementById('ngoSignupClose');
+        const showNgoLogin = document.getElementById('showNgoLogin');
 
         // Hide old login modal on page load
         if (loginModal) {
@@ -501,6 +564,54 @@
                 }
             });
         }
+        // NGO Login button in role modal
+        if (ngoLoginBtn && ngoLoginModal && loginRoleModal) {
+            ngoLoginBtn.addEventListener('click', function() {
+                loginRoleModal.style.display = 'none';
+                ngoLoginModal.style.display = 'block';
+            });
+        }
+        if (ngoLoginClose && ngoLoginModal) {
+            ngoLoginClose.addEventListener('click', function() {
+                ngoLoginModal.style.display = 'none';
+            });
+        }
+        if (ngoLoginModal) {
+            ngoLoginModal.addEventListener('click', function(e) {
+                if (e.target === ngoLoginModal) {
+                    ngoLoginModal.style.display = 'none';
+                }
+            });
+        }
+        // Show NGO Signup from NGO Login
+        if (showNgoSignup && ngoLoginModal && ngoSignupModal) {
+            showNgoSignup.addEventListener('click', function(e) {
+                e.preventDefault();
+                ngoLoginModal.style.display = 'none';
+                ngoSignupModal.style.display = 'block';
+            });
+        }
+        // Show NGO Login from NGO Signup
+        if (showNgoLogin && ngoSignupModal && ngoLoginModal) {
+            showNgoLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                ngoSignupModal.style.display = 'none';
+                ngoLoginModal.style.display = 'block';
+            });
+        }
+        if (ngoSignupClose && ngoSignupModal) {
+            ngoSignupClose.addEventListener('click', function() {
+                ngoSignupModal.style.display = 'none';
+            });
+        }
+        if (ngoSignupModal) {
+            ngoSignupModal.addEventListener('click', function(e) {
+                if (e.target === ngoSignupModal) {
+                    ngoSignupModal.style.display = 'none';
+                }
+            });
+        };
+
 
     document.addEventListener('DOMContentLoaded', function() {
         // Mobile menu toggle logic
