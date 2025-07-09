@@ -156,9 +156,50 @@
                     </tr>
                 </thead>
                 <tbody id="acceptedTasksTableBody">
+                  
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Daily Briefing & Alerts Section -->
+    <section class="ngo-reports-section" id="dailyBriefingSection">
+        <h3>Daily Briefing &amp; Alerts</h3>
+        <div id="dailyBriefingAlerts" class="ngo-daily-briefing">
+            <div class="ngo-alerts">
+                <strong>Admin Updates:</strong>
+                <ul id="adminUpdatesList">
+                    <!-- Populated by JS -->
+                </ul>
+            </div>
+            <div class="ngo-task-priorities" style="margin-top:1.2em;">
+                <strong>Today's Priorities &amp; Urgent Focus:</strong>
+                <ul id="taskPrioritiesList">
+                    <!-- Populated by JS -->
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- Donation Tracking Section (Optional) -->
+    <section class="ngo-reports-section" id="donationTrackingSection">
+        <h3>Donation Tracking</h3>
+        <div class="ngo-table-responsive">
+            <table class="ngo-sos-table" id="donationTable">
+                <thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody id="donationTableBody">
                     <!-- Populated by JS -->
                 </tbody>
             </table>
+        </div>
+        <div id="donationEmptyMsg" style="color:#888;text-align:center;display:none;">
+            No donations received yet.
         </div>
     </section>
     <footer class="ngo-footer">

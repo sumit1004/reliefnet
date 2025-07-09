@@ -1,10 +1,10 @@
-// Logout button
+// Logout button logic
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', function (e) {
+    logoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
         if (typeof firebase !== "undefined" && firebase.auth) {
-            firebase.auth().signOut().then(function () {
+            firebase.auth().signOut().then(function() {
                 window.location.href = "index.html";
             });
         } else {
@@ -13,7 +13,7 @@ if (logoutBtn) {
     });
 }
 
-// --- Firebase Init 
+// --- Firebase Init ---
 const firebaseConfig = {
     apiKey: "AIzaSyCtbphQnrs9-GRWU-rXV29ryfOo4nRwVOs",
     authDomain: "reliefnet-ca9c3.firebaseapp.com",
@@ -28,10 +28,11 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-// --- Responsive Nav 
-document.addEventListener('DOMContentLoaded', function () {
+// --- Responsive Nav ---
+document.addEventListener('DOMContentLoaded', function() {
+    // No menu icon/sidebar logic, just show/hide logout button
     const logoutBtn = document.getElementById('logoutBtn');
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebase.auth().onAuthStateChanged(function(user) {
         if (logoutBtn) {
             logoutBtn.style.display = user ? '' : 'none';
         }
@@ -157,7 +158,7 @@ function setLang(lang) {
         }
     });
 }
-langSelect.addEventListener('change', function () {
+langSelect.addEventListener('change', function() {
     setLang(this.value);
     localStorage.setItem('reliefnet_lang', this.value);
 });
@@ -187,7 +188,7 @@ loadAlerts();
 const sosBtn = document.getElementById('sosBtn');
 const sosModal = document.getElementById('sosModal');
 const sosModalClose = document.getElementById('sosModalClose');
-sosBtn.addEventListener('click', function (e) {
+sosBtn.addEventListener('click', function(e) {
     e.preventDefault();
     sosModal.classList.add('active');
     document.getElementById('sosFormMsg').textContent = '';
@@ -212,15 +213,15 @@ const sosFormMsg = document.getElementById('sosFormMsg');
 const sosLocationInput = document.getElementById('sosLocation');
 const detectLocationBtn = document.getElementById('detectLocationBtn');
 if (detectLocationBtn && sosLocationInput) {
-    detectLocationBtn.addEventListener('click', function (e) {
+    detectLocationBtn.addEventListener('click', function(e) {
         e.preventDefault();
         sosLocationInput.value = 'Detecting...';
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (pos) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
                 const lat = pos.coords.latitude;
                 const lng = pos.coords.longitude;
                 sosLocationInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-            }, function () {
+            }, function() {
                 sosLocationInput.value = 'Unable to detect location';
             });
         } else {
@@ -229,25 +230,23 @@ if (detectLocationBtn && sosLocationInput) {
     });
 }
 if (sosForm) {
-    sosForm.onsubmit = function (e) {
+    sosForm.onsubmit = function(e) {
         e.preventDefault();
         if (sosFormMsg) sosFormMsg.textContent = '';
-        const name = document.getElementById('sosName').value.trim();
-        const phone = document.getElementById('sosPhone').value.trim();
+        // Removed name and phone
         const location = sosLocationInput.value.trim();
         const urgency = document.getElementById('sosUrgency').value;
         const details = document.getElementById('sosDetails').value.trim();
         const helpTypes = Array.from(document.querySelectorAll('input[name="helpType"]:checked')).map(cb => cb.value);
 
-        if (!name || !phone || !location || !urgency || helpTypes.length === 0) {
+        if (!location || !urgency || helpTypes.length === 0) {
             if (sosFormMsg) sosFormMsg.textContent = 'Please fill all required fields.';
             return false;
         }
 
         const sosRef = firebase.database().ref('sos').push();
         const sosData = {
-            name,
-            phone,
+           
             location,
             urgency,
             details,
@@ -271,7 +270,7 @@ if (sosForm) {
 }
 
 
-// --- Map and Shelter codes ---
+// --- Map and Shelter Logic ---
 let map;
 let markers = [];
 function initMap() {
@@ -296,7 +295,7 @@ function loadShelters(type) {
     });
 }
 document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         loadShelters(this.getAttribute('data-type'));
@@ -305,34 +304,58 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 setTimeout(initMap, 500);
 
 // --- Resources Nearby ---
-const resourcesList = document.getElementById('resourcesList');
-function loadResources() {
-    firebase.database().ref('resources').orderByChild('timestamp').limitToLast(10).on('value', snap => {
+(function() {
+    const resourcesList = document.getElementById('resourcesList');
+    // Use ReliefNet Admin DB for resources
+    const resourcesConfig = {
+        apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+        authDomain: "reliefnet-admin.firebaseapp.com",
+        databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+        projectId: "reliefnet-admin",
+        storageBucket: "reliefnet-admin.firebasestorage.app",
+        messagingSenderId: "76512879742",
+        appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+        measurementId: "G-6W1RHH9L62"
+    };
+    let resourcesApp;
+    if (!firebase.apps.some(app => app.name === "resourcesHome")) {
+        resourcesApp = firebase.initializeApp(resourcesConfig, "resourcesHome");
+    } else {
+        resourcesApp = firebase.app("resourcesHome");
+    }
+    const resourcesDb = resourcesApp.database();
+
+    function renderResources(data) {
+        if (!resourcesList) return;
         resourcesList.innerHTML = '';
-        if (snap.exists()) {
-            snap.forEach(child => {
-                const r = child.val();
-                const card = document.createElement('div');
-                card.className = 'resource-card';
-                card.innerHTML = `
-                    <div><b>${r.name}</b></div>
-                    <div>${r.type}</div>
-                    <div>${r.address}</div>
-                    <div>${r.openTime ? 'Open: ' + r.openTime : ''} ${r.closeTime ? 'Close: ' + r.closeTime : ''}</div>
-                    <div>${r.distance ? 'Distance: ' + r.distance + ' km' : ''}</div>
-                `;
-                resourcesList.appendChild(card);
-            });
+        if (!data) {
+            resourcesList.innerHTML = '<div>No resources available.</div>';
+            return;
         }
+        Object.values(data).reverse().forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'resource-card';
+            card.innerHTML = `
+                <div><b>${r.type || 'Resource'}</b></div>
+                <div>Quantity: ${r.quantity || 'N/A'}</div>
+                <div>Location: ${r.location || 'N/A'}</div>
+                <div>Status: ${r.status || 'Available'}</div>
+                <div>${r.updatedAt ? 'Updated: ' + new Date(r.updatedAt).toLocaleString() : ''}</div>
+            `;
+            resourcesList.appendChild(card);
+        });
+    }
+
+    resourcesDb.ref('resources').on('value', snap => {
+        renderResources(snap.val());
     });
-}
-loadResources();
+})();
 
 // --- Missing Person Report ---
 const missingForm = document.getElementById('missingForm');
 const missingList = document.getElementById('missingList');
 if (missingForm) {
-    missingForm.onsubmit = function (e) {
+    missingForm.onsubmit = function(e) {
         e.preventDefault();
         const name = document.getElementById('missingName').value.trim();
         const age = document.getElementById('missingAge').value.trim();
@@ -379,7 +402,7 @@ if (missingForm) {
         } else {
             afterUpload('');
         }
-
+        
     };
 }
 
@@ -396,11 +419,11 @@ const sidebarLangSelect = document.getElementById('sidebarLangSelect');
 if (sidebarLangSelect && langSelect) {
     sidebarLangSelect.innerHTML = langSelect.innerHTML;
     sidebarLangSelect.value = langSelect.value;
-    sidebarLangSelect.addEventListener('change', function () {
+    sidebarLangSelect.addEventListener('change', function() {
         langSelect.value = this.value;
         langSelect.dispatchEvent(new Event('change'));
     });
-    langSelect.addEventListener('change', function () {
+    langSelect.addEventListener('change', function() {
         sidebarLangSelect.value = this.value;
     });
 }
@@ -425,15 +448,15 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', closeSidebar);
 });
 
-
-firebase.auth().onAuthStateChanged(function (user) {
+// Sync logout button visibility and action
+firebase.auth().onAuthStateChanged(function(user) {
     if (logoutBtn) logoutBtn.style.display = user ? '' : 'none';
     if (sidebarLogoutBtn) sidebarLogoutBtn.style.display = user ? '' : 'none';
 });
 function logoutHandler(e) {
     e.preventDefault();
     if (typeof firebase !== "undefined" && firebase.auth) {
-        firebase.auth().signOut().then(function () {
+        firebase.auth().signOut().then(function() {
             window.location.href = "index.html";
         });
     } else {
@@ -449,7 +472,7 @@ if (sidebarLogoutBtn) {
 function logoutHandler(e) {
     e.preventDefault();
     if (typeof firebase !== "undefined" && firebase.auth) {
-        firebase.auth().signOut().then(function () {
+        firebase.auth().signOut().then(function() {
             window.location.href = "index.html";
         });
     } else {
@@ -462,6 +485,110 @@ if (logoutBtn) {
 if (sidebarLogoutBtn) {
     sidebarLogoutBtn.addEventListener('click', logoutHandler);
 }
+
+// Relief Centers Map Logic
+(function() {
+    // ReliefNet Admin Firebase config for relief centers
+    const reliefConfig = {
+        apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+        authDomain: "reliefnet-admin.firebaseapp.com",
+        databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+        projectId: "reliefnet-admin",
+        storageBucket: "reliefnet-admin.firebasestorage.app",
+        messagingSenderId: "76512879742",
+        appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+        measurementId: "G-6W1RHH9L62"
+    };
+    let reliefApp;
+    if (!firebase.apps.some(app => app.name === "reliefApp")) {
+        reliefApp = firebase.initializeApp(reliefConfig, "reliefApp");
+    } else {
+        reliefApp = firebase.app("reliefApp");
+    }
+    const reliefDb = reliefApp.database();
+
+    let map, markerLayer;
+    let reliefCentersData = [];
+
+    function initMapSection() {
+        const mapDiv = document.getElementById('map');
+        if (!mapDiv) return;
+        map = L.map(mapDiv).setView([21.1938, 81.3509], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        markerLayer = L.layerGroup().addTo(map);
+    }
+    document.addEventListener('DOMContentLoaded', initMapSection);
+
+    // Fetch all relief centers from Firebase
+    function fetchReliefCenters() {
+        reliefDb.ref('reliefCenters').on('value', snapshot => {
+            const data = snapshot.val();
+            reliefCentersData = [];
+            if (data) {
+                Object.values(data).forEach(center => {
+                    if (center.type && center.lat && center.lng) {
+                        reliefCentersData.push(center);
+                    }
+                });
+            }
+            // Show default (shelter) on load
+            showCentersOnMap('shelter');
+        });
+    }
+
+    // Show markers by type
+    function showCentersOnMap(type) {
+        if (!markerLayer) return;
+        markerLayer.clearLayers();
+        let typeLabel = '';
+        let iconUrl = '';
+        if (type === 'shelter') {
+            typeLabel = 'Shelter';
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/69/69524.png";
+        } else if (type === 'medical') {
+            typeLabel = 'Medical Camp';
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/2965/2965567.png";
+        } else if (type === 'food') {
+            typeLabel = 'Food Center';
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/1046/1046784.png";
+        }
+        reliefCentersData.forEach(center => {
+            if (center.type && center.type.toLowerCase() === typeLabel.toLowerCase()) {
+                const marker = L.marker([center.lat, center.lng], {
+                    icon: L.icon({
+                        iconUrl: iconUrl,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 28],
+                        popupAnchor: [0, -28]
+                    })
+                }).addTo(markerLayer);
+                marker.bindPopup(`<b>${center.type}</b><br>${center.address || ''}`);
+            }
+        });
+    }
+
+    // Filter button logic
+    function setupMapFilters() {
+        const filterBtns = document.querySelectorAll('.map-filters .filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const type = this.getAttribute('data-type');
+                showCentersOnMap(type);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            fetchReliefCenters();
+            setupMapFilters();
+        }, 500);
+    });
+})();
 
 
 

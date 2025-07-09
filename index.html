@@ -93,15 +93,15 @@
     </section>
 
 
-    <section class="join" id="volunteers" >
-        <div class="container joinus">
+    <section class="join" id="volunteers">
+        <div class="container join-flex">
             <div>
                 <h2>Join the Movement</h2>
                 <p>Are you an NGO or a volunteer? Join ReliefNet and make a difference in rural disaster response.</p>
             </div>
-            <div class="join-button">
-                <a href="#contact" class="btn btn-secondary">Join as NGO</a>
-                <a href="#contact" class="btn btn-primary">Become a volunteer</a>
+            <div class="join-buttons">
+                <a href="#contact" class="btn btn-secondary" id="joinNgoBtn">Join as NGO</a>
+                <a href="#contact" class="btn btn-primary" id="joinVolunteerBtn">Become a Volunteer</a>
             </div>
         </div>
     </section>
@@ -685,6 +685,115 @@
                         document.body.classList.remove('nav-open');
                     }
                 });
+            });
+        }
+    });
+
+
+      // --- Donation Section Logic ---
+    (function() {
+        // Use ReliefNet Admin DB for donations and NGOs
+        const donationConfig = {
+            apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+            authDomain: "reliefnet-admin.firebaseapp.com",
+            databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+            projectId: "reliefnet-admin",
+            storageBucket: "reliefnet-admin.firebasestorage.app",
+            messagingSenderId: "76512879742",
+            appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+            measurementId: "G-6W1RHH9L62"
+        };
+        let donationApp;
+        if (!firebase.apps.some(app => app.name === "donationApp")) {
+            donationApp = firebase.initializeApp(donationConfig, "donationApp");
+        } else {
+            donationApp = firebase.app("donationApp");
+        }
+        const donationDb = donationApp.database();
+
+        // Populate NGO list
+        const donationTarget = document.getElementById('donationTarget');
+        function populateNGOs() {
+            donationDb.ref('ngos').once('value', snap => {
+                if (snap.exists()) {
+                    Object.entries(snap.val()).forEach(([key, ngo]) => {
+                        const opt = document.createElement('option');
+                        opt.value = key;
+                        opt.textContent = ngo.name ? `NGO: ${ngo.name}` : `NGO: ${key}`;
+                        donationTarget.appendChild(opt);
+                    });
+                }
+            });
+        }
+        if (donationTarget) {
+            // Remove old NGO options except admin
+            while (donationTarget.options.length > 1) donationTarget.remove(1);
+            populateNGOs();
+        }
+
+        // Handle donation form submit
+        const donationForm = document.getElementById('donationForm');
+        if (donationForm) {
+            donationForm.onsubmit = function(e) {
+                e.preventDefault();
+                const type = document.getElementById('donationType').value;
+                const amount = document.getElementById('donationAmount').value;
+                const target = document.getElementById('donationTarget').value;
+                const contact = document.getElementById('donorContact').value.trim();
+                const message = document.getElementById('donationMessage').value.trim();
+                const statusDiv = document.getElementById('donationStatus');
+                if (!type || !amount || !target) {
+                    statusDiv.textContent = "Please fill all required fields.";
+                    return;
+                }
+                const donationData = {
+                    type,
+                    amount,
+                    contact,
+                    message,
+                    timestamp: Date.now()
+                };
+                if (target === "admin") {
+                    donationDb.ref('donations').push(donationData, function(error) {
+                        if (error) {
+                            statusDiv.textContent = "Failed to submit donation.";
+                        } else {
+                            statusDiv.textContent = "Thank you for your donation!";
+                            donationForm.reset();
+                            setTimeout(() => { statusDiv.textContent = ""; }, 1500);
+                        }
+                    });
+                } else {
+                    donationDb.ref('ngos/' + target + '/donations').push(donationData, function(error) {
+                        if (error) {
+                            statusDiv.textContent = "Failed to submit donation.";
+                        } else {
+                            statusDiv.textContent = "Thank you for supporting this NGO!";
+                            donationForm.reset();
+                            setTimeout(() => { statusDiv.textContent = ""; }, 1500);
+                        }
+                    });
+                }
+            };
+        }
+    })();
+
+    // --- Join the Movement Button Logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        var joinNgoBtn = document.getElementById('joinNgoBtn');
+        var joinVolunteerBtn = document.getElementById('joinVolunteerBtn');
+        var ngoSignupModal = document.getElementById('ngoSignupModal');
+        var volunteerSignupModal = document.getElementById('volunteerSignupModal');
+        if (joinNgoBtn && ngoSignupModal) {
+            joinNgoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                ngoSignupModal.style.display = 'block';
+            });
+        }
+        if (joinVolunteerBtn && volunteerSignupModal) {
+            joinVolunteerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                volunteerSignupModal.style.display = 'block';
             });
         }
     });

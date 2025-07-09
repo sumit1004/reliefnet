@@ -483,6 +483,55 @@ function initFirebaseAndApp() {
         }
         fetchSosReports();
         fetchMissingReports();
+
+        // Daily Briefing & Alerts (dummy data, replace with real fetch if needed)
+        const adminUpdatesList = document.getElementById('adminUpdatesList');
+        const taskPrioritiesList = document.getElementById('taskPrioritiesList');
+        if (adminUpdatesList) {
+            adminUpdatesList.innerHTML = `
+                <li>Severe weather alert in North Zone. All teams stay prepared.</li>
+                <li>Admin meeting at 4:00 PM via Zoom.</li>
+                <li>Submit yesterday's activity report by 2:00 PM.</li>
+            `;
+        }
+        if (taskPrioritiesList) {
+            taskPrioritiesList.innerHTML = `
+                <li>Prioritize medical supply distribution in Sector 5.</li>
+                <li>Urgent: Rescue operation at Riverside area.</li>
+                <li>Check-in with relief points for food stock updates.</li>
+            `;
+        }
+
+        // --- Donation Tracking Section ---
+        // Dummy data for demonstration; replace with real fetch from backend/Firebase as needed
+        const donationTableBody = document.getElementById('donationTableBody');
+        const donationEmptyMsg = document.getElementById('donationEmptyMsg');
+        // Example: fetch from Firebase under 'donations/{ngoId}' if you have user auth
+        const dummyDonations = [
+            { donor: "Amit Sharma", amount: 5000, date: "2024-06-01", message: "Keep up the good work!" },
+            { donor: "Priya Verma", amount: 2500, date: "2024-06-03", message: "" },
+            { donor: "Anonymous", amount: 10000, date: "2024-06-05", message: "For flood relief." }
+        ];
+        function renderDonations(donations) {
+            if (!donationTableBody) return;
+            donationTableBody.innerHTML = "";
+            if (!donations || donations.length === 0) {
+                if (donationEmptyMsg) donationEmptyMsg.style.display = "block";
+                return;
+            }
+            if (donationEmptyMsg) donationEmptyMsg.style.display = "none";
+            donations.forEach(d => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${d.donor || "Anonymous"}</td>
+                    <td>₹${d.amount.toLocaleString()}</td>
+                    <td>${d.date}</td>
+                    <td>${d.message || "-"}</td>
+                `;
+                donationTableBody.appendChild(row);
+            });
+        }
+        renderDonations(dummyDonations);
     });
 }
 

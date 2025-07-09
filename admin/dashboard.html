@@ -78,6 +78,79 @@
     </section>
     <!-- Team Section End -->
 
+    <!-- Resources Section Start -->
+    <section id="resourcesSection" class="admin-resources-section">
+        <h2>Available Resources</h2>
+        <!-- Add Resource Form Start -->
+        <form id="addResourceForm" style="margin-bottom:1.5em; background:#fff; padding:1em 1.2em; border-radius:0.7em; box-shadow:0 2px 8px rgba(0,0,0,0.04); max-width:600px;">
+            <h3 style="margin-top:0;">Add New Resource</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:1em;">
+                <input type="text" id="resourceType" placeholder="Resource" required style="flex:1; min-width:120px;">
+                <input type="number" id="resourceQuantity" placeholder="Quantity" min="1" required style="width:100px;">
+                <input type="text" id="resourceLocation" placeholder="Location" required style="flex:1; min-width:120px;">
+                <select id="resourceStatus" style="width:120px;">
+                    <option value="Available">Available</option>
+                    <option value="In Use">In Use</option>
+                    <option value="Unavailable">Unavailable</option>
+                </select>
+                <button type="submit" class="volunteer-view-btn" style="min-width:110px;">Add</button>
+            </div>
+            <div id="addResourceStatus" style="margin-top:0.7em; color:#2563eb;"></div>
+        </form>
+        <!-- Add Resource Form End -->
+        <div id="resourcesList" class="resources-list">
+            <!-- Resource entries will be populated here -->
+        </div>
+    </section>
+    <!-- Resources Section End -->
+
+    <!-- Map & Relief Centers Section Start -->
+    <section id="mapSection" class="admin-map-section">
+        <h2>Map & Relief Centers (Bhilai, Chhattisgarh)</h2>
+        <div id="map" style="width:100%;height:350px;border-radius:0.7em;margin-bottom:1em;"></div>
+        <form id="addLocationForm" style="margin-bottom:1em; background:#fff; padding:1em 1.2em; border-radius:0.7em; box-shadow:0 2px 8px rgba(0,0,0,0.04); max-width:600px;">
+            <h3 style="margin-top:0;">Add Relief Center</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:1em;">
+                <select id="locationType" required style="min-width:120px;">
+                    <option value="">Type</option>
+                    <option value="Shelter">Shelter</option>
+                    <option value="Medical Camp">Medical Camp</option>
+                    <option value="Food Center">Food Center</option>
+                </select>
+                <input type="text" id="locationAddress" placeholder="Address" required style="flex:2; min-width:120px;">
+                <input type="text" id="locationLat" placeholder="Latitude" required style="width:110px;">
+                <input type="text" id="locationLng" placeholder="Longitude" required style="width:110px;">
+                <button type="submit" class="volunteer-view-btn" style="min-width:110px;">Add</button>
+            </div>
+            <div id="addLocationStatus" style="margin-top:0.7em; color:#2563eb;"></div>
+            <div style="font-size:0.95em; color:#666; margin-top:0.5em;">
+                Tip: Click on the map to auto-fill latitude and longitude.
+            </div>
+        </form>
+        <div id="locationsList" class="locations-list" style="margin-bottom:1em;">
+            <!-- List of relief centers will be shown here -->
+        </div>
+    </section>
+    <!-- Map & Relief Centers Section End -->
+
+    <!-- NGO Section Start -->
+    <section id="ngoSection" class="admin-ngo-section">
+        <h2>NGOs</h2>
+        <div id="ngoList" class="ngo-list">
+            <!-- NGO entries will be populated here -->
+        </div>
+    </section>
+    <!-- NGO Section End -->
+
+    <!-- Donations Section Start -->
+    <section id="donationSection" class="admin-donation-section">
+        <h2>Donations</h2>
+        <div id="donationList" class="donation-list">
+            <!-- Donation entries will be populated here -->
+        </div>
+    </section>
+    <!-- Donations Section End -->
+
     <!-- Volunteer Detail Modal -->
     <div id="volunteerModal" class="volunteer-modal" style="display:none;">
         <div class="volunteer-modal-content">
@@ -98,7 +171,9 @@
     <!-- Firebase App (the core Firebase SDK) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Leaflet.js for map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="admin.js"></script>
 </body>
-
 </html>

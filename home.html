@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReliefNet - Disaster Relief Platform</title>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="css/home.css">
     <style>
-
+      
     </style>
 </head>
-
 <body>
     <header class="header">
-        <div class="header">
+        <div class="header-flex">
             <div class="logo">ReliefNet</div>
             <!-- Menu icon for mobile -->
             <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
@@ -47,9 +45,9 @@
             <a href="#missingSection" class="sidebar-link" data-i18n="missing_persons">Missing</a>
             <a href="#contacts" class="sidebar-link" data-i18n="emergency_contacts">Contacts</a>
             <a href="#" class="sidebar-link" id="sidebarLogoutBtn" style="display:none;">Logout</a>
-            <select id="sidebarLangSelect" class="lang-select" aria-label="Language"></select>
+              <select id="sidebarLangSelect" class="lang-select" aria-label="Language"></select>
         </nav>
-
+      
     </div>
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
@@ -86,8 +84,7 @@
             <form id="missingForm" class="missing-form">
                 <input type="text" id="missingName" placeholder="Name" required>
                 <input type="number" id="missingAge" placeholder="Age" min="0" required>
-                <input type="text" id="missingAadhar" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}"
-                    required>
+                <input type="text" id="missingAadhar" placeholder="Aadhar Number" maxlength="12" pattern="\d{12}" required>
                 <input type="text" id="missingFather" placeholder="Father's Name" required>
                 <input type="text" id="missingCity" placeholder="City" required>
                 <input type="text" id="missingState" placeholder="State" required>
@@ -134,24 +131,16 @@
             <span class="modal-close" id="sosModalClose">&times;</span>
             <h2 data-i18n="request_sos">Request SOS Help</h2>
             <form id="sosForm" class="sos-form">
-                <input type="text" id="sosName" placeholder="Name" required>
-                <input type="tel" id="sosPhone" placeholder="Phone" required>
                 <div class="location-row">
                     <input type="text" id="sosLocation" placeholder="Location" readonly required>
-                    <button type="button" id="detectLocationBtn" class="btn btn-link"
-                        data-i18n="detect_location">Detect</button>
+                    <button type="button" id="detectLocationBtn" class="btn btn-link" data-i18n="detect_location">Detect</button>
                 </div>
                 <div class="checkbox-group">
-                    <label><input type="checkbox" name="helpType" value="food"> <span
-                            data-i18n="food">Food</span></label>
-                    <label><input type="checkbox" name="helpType" value="water"> <span
-                            data-i18n="water">Water</span></label>
-                    <label><input type="checkbox" name="helpType" value="shelter"> <span
-                            data-i18n="shelter">Shelter</span></label>
-                    <label><input type="checkbox" name="helpType" value="medical"> <span
-                            data-i18n="medical">Medical</span></label>
-                    <label><input type="checkbox" name="helpType" value="rescue"> <span
-                            data-i18n="rescue">Rescue</span></label>
+                    <label><input type="checkbox" name="helpType" value="food"> <span data-i18n="food">Food</span></label>
+                    <label><input type="checkbox" name="helpType" value="water"> <span data-i18n="water">Water</span></label>
+                    <label><input type="checkbox" name="helpType" value="shelter"> <span data-i18n="shelter">Shelter</span></label>
+                    <label><input type="checkbox" name="helpType" value="medical"> <span data-i18n="medical">Medical</span></label>
+                    <label><input type="checkbox" name="helpType" value="rescue"> <span data-i18n="rescue">Rescue</span></label>
                 </div>
                 <select id="sosUrgency" required>
                     <option value="" disabled selected data-i18n="urgency">Urgency</option>
@@ -167,8 +156,6 @@
         </div>
     </div>
 
-
-    
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -177,7 +164,6 @@
     <script src="js/home.js"></script>
     <script src="script.js"></script>
 
-
+    
 </body>
-
 </html>

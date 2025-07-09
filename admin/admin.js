@@ -514,63 +514,443 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Assignment Modal (shared for volunteer/team)
-    function openAssignModal(type, key, data) {
-        // Create modal if not exists
-        let modal = document.getElementById('assignModal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'assignModal';
-            modal.className = 'volunteer-modal';
-            modal.style.display = 'none';
-            modal.innerHTML = `
-                <div class="volunteer-modal-content">
-                    <span id="closeAssignModal" class="close-volunteer-modal">&times;</span>
-                    <h3>Assign Work</h3>
-                    <form id="assignForm">
-                        <label for="assignTask">Task/Work:</label>
-                        <input type="text" id="assignTask" name="assignTask" required style="width:95%;margin-bottom:1em;">
-                        <button type="submit" class="volunteer-view-btn" style="margin-top:0.5em;">Assign</button>
-                    </form>
-                    <div id="assignStatus" style="margin-top:1em;color:#2563eb;"></div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-        // Show modal
-        modal.style.display = 'flex';
-        document.getElementById('assignTask').value = '';
-        document.getElementById('assignStatus').innerText = '';
-        // Close logic
-        document.getElementById('closeAssignModal').onclick = () => { modal.style.display = 'none'; };
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
+    // === Firebase Resources Section ===
+    if (typeof firebase !== "undefined") {
+        // Use a dedicated app for resources with the provided config
+        const resourcesConfig = {
+            apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+            authDomain: "reliefnet-admin.firebaseapp.com",
+            databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+            projectId: "reliefnet-admin",
+            storageBucket: "reliefnet-admin.firebasestorage.app",
+            messagingSenderId: "76512879742",
+            appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+            measurementId: "G-6W1RHH9L62"
         };
-        // Submit logic
-        document.getElementById('assignForm').onsubmit = function(e) {
-            e.preventDefault();
-            const task = document.getElementById('assignTask').value.trim();
-            if (!task) return;
-            let dbRef;
-            if (type === 'volunteer') {
-                // Assign to volunteer
-                let volunteerApp = firebase.app("volunteerApp");
-                dbRef = volunteerApp.database().ref('volunteers/' + key + '/assignedWork');
-            } else if (type === 'team') {
-                // Assign to team
-                let teamApp = firebase.app("teamApp");
-                dbRef = teamApp.database().ref('teams/' + key + '/assignedWork');
+        let resourcesApp;
+        if (!firebase.apps.some(app => app.name === "resourcesApp")) {
+            resourcesApp = firebase.initializeApp(resourcesConfig, "resourcesApp");
+        } else {
+            resourcesApp = firebase.app("resourcesApp");
+        }
+        const resourcesDb = resourcesApp.database();
+
+        // Add Resource Form Logic
+        const addResourceForm = document.getElementById('addResourceForm');
+        if (addResourceForm) {
+            addResourceForm.onsubmit = function(e) {
+                e.preventDefault();
+                // Removed name field
+                const type = document.getElementById('resourceType').value.trim();
+                const quantity = parseInt(document.getElementById('resourceQuantity').value, 10);
+                const location = document.getElementById('resourceLocation').value.trim();
+                const status = document.getElementById('resourceStatus').value;
+                const statusDiv = document.getElementById('addResourceStatus');
+                if (!type || !quantity || !location) {
+                    statusDiv.innerText = "Please fill all fields.";
+                    return;
+                }
+                const newResource = {
+                    type,
+                    quantity,
+                    location,
+                    status,
+                    updatedAt: Date.now()
+                };
+                resourcesDb.ref('resources').push(newResource, function(error) {
+                    if (error) {
+                        statusDiv.innerText = "Failed to add resource.";
+                    } else {
+                        statusDiv.innerText = "Resource added successfully!";
+                        addResourceForm.reset();
+                        setTimeout(() => { statusDiv.innerText = ""; }, 1200);
+                    }
+                });
+            };
+        }
+
+        function renderResources(resourcesData) {
+            const resourcesList = document.getElementById('resourcesList');
+            if (!resourcesList) return;
+            resourcesList.innerHTML = '';
+            if (!resourcesData) {
+                resourcesList.innerHTML = '<p>No resources available.</p>';
+                return;
             }
-            dbRef.set(task, function(error) {
-                if (error) {
-                    document.getElementById('assignStatus').innerText = 'Failed to assign work.';
-                } else {
-                    document.getElementById('assignStatus').innerText = 'Work assigned successfully!';
-                    setTimeout(() => { modal.style.display = 'none'; }, 1200);
+            let table = `<table class="resources-table">
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>Quantity</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            Object.entries(resourcesData).reverse().forEach(([key, res]) => {
+                table += `
+                    <tr>
+                        <td>${res.type || 'N/A'}</td>
+                        <td>${res.quantity || 'N/A'}</td>
+                        <td>${res.location || 'N/A'}</td>
+                        <td>${res.status || 'Available'}</td>
+                        <td>${res.updatedAt ? new Date(res.updatedAt).toLocaleString() : 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            table += '</tbody></table>';
+            resourcesList.innerHTML = table;
+        }
+
+        resourcesDb.ref('resources').on('value', (snapshot) => {
+            renderResources(snapshot.val());
+        });
+    }
+
+    // === Map & Relief Centers Section ===
+    if (typeof firebase !== "undefined") {
+        // Use the resourcesApp for map data as well
+        let mapDb;
+        if (firebase.apps.some(app => app.name === "resourcesApp")) {
+            mapDb = firebase.app("resourcesApp").database();
+        } else {
+            // fallback: use default app
+            mapDb = firebase.database();
+        }
+
+        // Initialize Leaflet map
+        let map, markerLayer;
+        function initMap() {
+            if (document.getElementById('map')) {
+                map = L.map('map').setView([21.1938, 81.3509], 13); // Bhilai, Chhattisgarh
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+                markerLayer = L.layerGroup().addTo(map);
+
+                // Click to fill lat/lng
+                map.on('click', function(e) {
+                    document.getElementById('locationLat').value = e.latlng.lat.toFixed(6);
+                    document.getElementById('locationLng').value = e.latlng.lng.toFixed(6);
+                });
+            }
+        }
+        setTimeout(initMap, 400); // Wait for DOM
+
+        // Add Location Form Logic
+        const addLocationForm = document.getElementById('addLocationForm');
+        if (addLocationForm) {
+            addLocationForm.onsubmit = function(e) {
+                e.preventDefault();
+                const type = document.getElementById('locationType').value;
+                // Removed name field
+                const address = document.getElementById('locationAddress').value.trim();
+                const lat = parseFloat(document.getElementById('locationLat').value);
+                const lng = parseFloat(document.getElementById('locationLng').value);
+                const statusDiv = document.getElementById('addLocationStatus');
+                if (!type || !address || isNaN(lat) || isNaN(lng)) {
+                    statusDiv.innerText = "Please fill all fields.";
+                    return;
+                }
+                const newLoc = {
+                    type,
+                    address,
+                    lat,
+                    lng,
+                    createdAt: Date.now()
+                };
+                mapDb.ref('reliefCenters').push(newLoc, function(error) {
+                    if (error) {
+                        statusDiv.innerText = "Failed to add location.";
+                    } else {
+                        statusDiv.innerText = "Location added successfully!";
+                        addLocationForm.reset();
+                        setTimeout(() => { statusDiv.innerText = ""; }, 1200);
+                    }
+                });
+            };
+        }
+
+        // Render locations on map and in list
+        function renderLocations(locations) {
+            const listDiv = document.getElementById('locationsList');
+            if (markerLayer) markerLayer.clearLayers();
+            if (!locations) {
+                if (listDiv) listDiv.innerHTML = "<p>No relief centers added yet.</p>";
+                return;
+            }
+            let html = `<table class="resources-table"><thead>
+                <tr><th>Type</th><th>Address</th><th>Lat</th><th>Lng</th><th>Added</th></tr>
+            </thead><tbody>`;
+            Object.entries(locations).reverse().forEach(([key, loc]) => {
+                html += `<tr>
+                    <td>${loc.type}</td>
+                    <td>${loc.address}</td>
+                    <td>${loc.lat}</td>
+                    <td>${loc.lng}</td>
+                    <td>${loc.createdAt ? new Date(loc.createdAt).toLocaleString() : ''}</td>
+                </tr>`;
+                // Add marker to map
+                if (markerLayer && map) {
+                    const icon = L.icon({
+                        iconUrl:
+                            loc.type === "Shelter"
+                                ? "https://cdn-icons-png.flaticon.com/512/69/69524.png"
+                                : loc.type === "Medical Camp"
+                                ? "https://cdn-icons-png.flaticon.com/512/2965/2965567.png"
+                                : "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 28],
+                        popupAnchor: [0, -28]
+                    });
+                    L.marker([loc.lat, loc.lng], { icon })
+                        .addTo(markerLayer)
+                        .bindPopup(`<b>${loc.type}</b><br>${loc.address}`);
                 }
             });
+            html += "</tbody></table>";
+            if (listDiv) listDiv.innerHTML = html;
+        }
+
+        mapDb.ref('reliefCenters').on('value', (snapshot) => {
+            renderLocations(snapshot.val());
+        });
+    }
+
+    // === Firebase NGO Section ===
+    if (typeof firebase !== "undefined") {
+        const ngoConfig = {
+            apiKey: "AIzaSyBB7xNTgCBvCm4UdEq4CwJLrdoDzjLfGXU",
+            authDomain: "reliefnet-ngo.firebaseapp.com",
+            databaseURL: "https://reliefnet-ngo-default-rtdb.firebaseio.com",
+            projectId: "reliefnet-ngo",
+            storageBucket: "reliefnet-ngo.firebasestorage.app",
+            messagingSenderId: "726996101151",
+            appId: "1:726996101151:web:80970999af3f0b483fcd2a",
+            measurementId: "G-86P79VT5EE"
         };
+        let ngoApp;
+        if (!firebase.apps.some(app => app.name === "ngoApp")) {
+            ngoApp = firebase.initializeApp(ngoConfig, "ngoApp");
+        } else {
+            ngoApp = firebase.app("ngoApp");
+        }
+        const ngoDb = ngoApp.database();
+
+        function renderNGOs(ngos) {
+            const ngoList = document.getElementById('ngoList');
+            if (!ngoList) return;
+            ngoList.innerHTML = '';
+            if (!ngos) {
+                ngoList.innerHTML = '<p>No NGOs found.</p>';
+                return;
+            }
+            let table = `<table class="resources-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Website</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            Object.entries(ngos).reverse().forEach(([key, ngo]) => {
+                table += `
+                    <tr>
+                        <td>${ngo.name || 'N/A'}</td>
+                        <td>${ngo.contact || ngo.phone || 'N/A'}</td>
+                        <td>${ngo.email || 'N/A'}</td>
+                        <td>${ngo.address || 'N/A'}</td>
+                        <td>${ngo.website ? `<a href="${ngo.website}" target="_blank">Visit</a>` : 'N/A'}</td>
+                        <td>${ngo.registeredAt ? new Date(ngo.registeredAt).toLocaleString() : 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            table += '</tbody></table>';
+            ngoList.innerHTML = table;
+        }
+
+        ngoDb.ref('ngos').on('value', (snapshot) => {
+            renderNGOs(snapshot.val());
+        });
+    }
+
+    // === Donations Section ===
+    if (typeof firebase !== "undefined") {
+        // Admin donations from resourcesApp
+        let adminDonationsDb;
+        if (firebase.apps.some(app => app.name === "resourcesApp")) {
+            adminDonationsDb = firebase.app("resourcesApp").database();
+        } else {
+            adminDonationsDb = firebase.database();
+        }
+
+        // NGO donations from ngoApp
+        let ngoDonationsDb;
+        if (firebase.apps.some(app => app.name === "ngoApp")) {
+            ngoDonationsDb = firebase.app("ngoApp").database();
+        }
+
+        // --- DUMMY DATA INSERTION (only if no data exists) ---
+        // Admin dummy donations
+        adminDonationsDb.ref('donations').once('value', snap => {
+            if (!snap.exists()) {
+                adminDonationsDb.ref('donations').push({
+                    donorName: "John Doe",
+                    amount: 5000,
+                    type: "Money",
+                    contact: "9999999999",
+                    timestamp: Date.now() - 86400000,
+                    message: "Keep up the good work!"
+                });
+                adminDonationsDb.ref('donations').push({
+                    donorName: "Priya Sharma",
+                    amount: 10,
+                    type: "Blankets",
+                    contact: "8888888888",
+                    timestamp: Date.now() - 43200000,
+                    message: "Hope this helps."
+                });
+            }
+        });
+
+        // NGO dummy donations (for first 2 NGOs found)
+        if (ngoDonationsDb) {
+            ngoDonationsDb.ref('ngos').once('value', snap => {
+                const ngos = snap.val();
+                if (ngos) {
+                    let count = 0;
+                    Object.entries(ngos).forEach(([ngoKey, ngo]) => {
+                        if (count < 2) {
+                            const donationsRef = ngoDonationsDb.ref(`ngos/${ngoKey}/donations`);
+                            donationsRef.once('value', dsnap => {
+                                if (!dsnap.exists()) {
+                                    donationsRef.push({
+                                        donorName: "Amit Kumar",
+                                        amount: 1000,
+                                        type: "Money",
+                                        contact: "7777777777",
+                                        timestamp: Date.now() - 7200000,
+                                        message: "Donation for relief."
+                                    });
+                                    donationsRef.push({
+                                        donorName: "Sonal Patel",
+                                        amount: 20,
+                                        type: "Food Packets",
+                                        contact: "6666666666",
+                                        timestamp: Date.now() - 3600000,
+                                        message: "For food distribution."
+                                    });
+                                }
+                            });
+                            count++;
+                        }
+                    });
+                }
+            });
+        }
+        // --- END DUMMY DATA ---
+
+        function renderDonations(adminDonations, ngoDonations) {
+            const donationList = document.getElementById('donationList');
+            if (!donationList) return;
+            let html = '';
+
+            // Admin Donations
+            html += `<h3>Direct to Admin</h3>`;
+            if (!adminDonations) {
+                html += '<p>No direct admin donations found.</p>';
+            } else {
+                html += `<table class="resources-table"><thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Date</th>
+                        <th>Message</th>
+                    </tr>
+                </thead><tbody>`;
+                Object.entries(adminDonations).reverse().forEach(([key, d]) => {
+                    html += `<tr>
+                        <td>${d.donorName || d.name || 'N/A'}</td>
+                        <td>${d.amount || 'N/A'}</td>
+                        <td>${d.type || 'N/A'}</td>
+                        <td>${d.contact || d.phone || 'N/A'}</td>
+                        <td>${d.timestamp ? new Date(d.timestamp).toLocaleString() : 'N/A'}</td>
+                        <td>${d.message || ''}</td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+            }
+
+            // NGO Donations
+            html += `<h3>Donations to NGOs</h3>`;
+            if (!ngoDonations) {
+                html += '<p>No NGO donations found.</p>';
+            } else {
+                html += `<table class="resources-table"><thead>
+                    <tr>
+                        <th>NGO</th>
+                        <th>Donor Name</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Date</th>
+                        <th>Message</th>
+                    </tr>
+                </thead><tbody>`;
+                Object.entries(ngoDonations).forEach(([ngoKey, ngo]) => {
+                    if (ngo.donations) {
+                        Object.entries(ngo.donations).reverse().forEach(([donKey, d]) => {
+                            html += `<tr>
+                                <td>${ngo.name || ngoKey}</td>
+                                <td>${d.donorName || d.name || 'N/A'}</td>
+                                <td>${d.amount || 'N/A'}</td>
+                                <td>${d.type || 'N/A'}</td>
+                                <td>${d.contact || d.phone || 'N/A'}</td>
+                                <td>${d.timestamp ? new Date(d.timestamp).toLocaleString() : 'N/A'}</td>
+                                <td>${d.message || ''}</td>
+                            </tr>`;
+                        });
+                    }
+                });
+                html += '</tbody></table>';
+            }
+
+            donationList.innerHTML = html;
+        }
+
+        // Fetch both admin and NGO donations and render together
+        function fetchAndRenderDonations() {
+            // Fetch admin donations
+            adminDonationsDb.ref('donations').once('value', adminSnap => {
+                const adminDonations = adminSnap.val();
+                // Fetch all NGOs and their donations
+                if (ngoDonationsDb) {
+                    ngoDonationsDb.ref('ngos').once('value', ngoSnap => {
+                        const ngos = ngoSnap.val();
+                        renderDonations(adminDonations, ngos);
+                    });
+                } else {
+                    renderDonations(adminDonations, null);
+                }
+            });
+        }
+
+        // Initial fetch and on change
+        if (adminDonationsDb) {
+            adminDonationsDb.ref('donations').on('value', fetchAndRenderDonations);
+        }
+        if (ngoDonationsDb) {
+            ngoDonationsDb.ref('ngos').on('value', fetchAndRenderDonations);
+        }
     }
 });
+

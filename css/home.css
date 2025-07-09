@@ -24,7 +24,7 @@
             top: 0;
             z-index: 100;
         }
-        .header {
+        .header-flex {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -464,7 +464,7 @@
             to { transform: translateX(0); opacity: 1; }
         }
         @media (max-width: 900px) {
-            .header, .footer-flex, .main-content {
+            .header-flex, .footer-flex, .main-content {
                 max-width: 100vw;
                 padding: 0 0.7rem;
             }
@@ -484,7 +484,7 @@
             }
         }
         @media (max-width: 700px) {
-            .header {
+            .header-flex {
                 flex-direction: row;
                 align-items: stretch;
                 height: auto;
@@ -549,7 +549,7 @@
             }
         }
         @media (max-width: 500px) {
-            .header {
+            .header-flex {
                 padding: 0.3rem 0.3rem 0.1rem 0.3rem;
             }
             .logo {

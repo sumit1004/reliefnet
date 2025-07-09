@@ -435,6 +435,7 @@ function loadUpcomingTasks() {
   });
 }
 
+
 function renderUpcomingTasks(upcomingTasks) {
   document.getElementById("todaysBriefing").textContent =
     "Today's Briefing: Focus on food distribution and medical support in affected villages.";
@@ -451,3 +452,104 @@ function renderUpcomingTasks(upcomingTasks) {
 loadAssignedTasks();
 loadPerformanceStats();
 loadUpcomingTasks();
+
+// --- Map Section: Show Nearby Shelters, Medical Camps, Food Centers ---
+(function() {
+  const reliefConfig = {
+    apiKey: "AIzaSyDgNYKQB0cuL4LnEEz897Mcq0_N_dQ_a1o",
+    authDomain: "reliefnet-admin.firebaseapp.com",
+    databaseURL: "https://reliefnet-admin-default-rtdb.firebaseio.com",
+    projectId: "reliefnet-admin",
+    storageBucket: "reliefnet-admin.firebasestorage.app",
+    messagingSenderId: "76512879742",
+    appId: "1:76512879742:web:9a834f2991c0b09198a42f",
+    measurementId: "G-6W1RHH9L62"
+  };
+  let reliefApp;
+  if (!firebase.apps.some(app => app.name === "reliefCentersApp")) {
+    reliefApp = firebase.initializeApp(reliefConfig, "reliefCentersApp");
+  } else {
+    reliefApp = firebase.app("reliefCentersApp");
+  }
+  const reliefDb = reliefApp.database();
+
+  let map, markerLayer, centersData = [];
+  let mapInitialized = false;
+
+  function initMap() {
+    if (mapInitialized) return;
+    const mapDiv = document.getElementById('reliefMap');
+    if (!mapDiv) return;
+    map = L.map(mapDiv).setView([21.1938, 81.3509], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    markerLayer = L.layerGroup().addTo(map);
+    mapInitialized = true;
+  }
+
+  function fetchCenters() {
+    reliefDb.ref('reliefCenters').on('value', snap => {
+      const data = snap.val();
+      centersData = [];
+      if (data) {
+        Object.values(data).forEach(center => {
+          if (center.type && center.lat && center.lng) {
+            centersData.push(center);
+          }
+        });
+      }
+      showCenters('shelter');
+    });
+  }
+
+  function showCenters(type) {
+    if (!markerLayer) return;
+    markerLayer.clearLayers();
+    let typeLabel = '';
+    let iconUrl = '';
+    if (type === 'shelter') {
+      typeLabel = 'Shelter';
+      iconUrl = "https://cdn-icons-png.flaticon.com/512/69/69524.png";
+    } else if (type === 'medical') {
+      typeLabel = 'Medical Camp';
+      iconUrl = "https://cdn-icons-png.flaticon.com/512/2965/2965567.png";
+    } else if (type === 'food') {
+      typeLabel = 'Food Center';
+      iconUrl = "https://cdn-icons-png.flaticon.com/512/1046/1046784.png";
+    }
+    centersData.forEach(center => {
+      if (center.type && center.type.toLowerCase() === typeLabel.toLowerCase()) {
+        const marker = L.marker([center.lat, center.lng], {
+          icon: L.icon({
+            iconUrl: iconUrl,
+            iconSize: [28, 28],
+            iconAnchor: [14, 28],
+            popupAnchor: [0, -28]
+          })
+        }).addTo(markerLayer);
+        marker.bindPopup(`<b>${center.type}</b><br>${center.address || ''}`);
+      }
+    });
+  }
+
+  function setupMapFilters() {
+    const mapSection = document.querySelector('.map-section');
+    if (!mapSection) return;
+    mapSection.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        mapSection.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        showCenters(this.getAttribute('data-type'));
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+      initMap();
+      fetchCenters();
+      setupMapFilters();
+    }, 500);
+  });
+})();

@@ -487,10 +487,57 @@ html, body {
     font-size: 15px;
 }
 
+/* === Resources Table Styles === */
+.resources-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.resources-table th,
+.resources-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 12px;
+    text-align: left;
+    word-break: break-word;
+    max-width: 180px;
+}
+.resources-table th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+.resources-table tr:nth-child(even) {
+    background: #fafafa;
+}
+.resources-table td {
+    font-size: 15px;
+}
+
 /* Responsive Table Wrapper for Team */
 .team-list {
     width: 100%;
     overflow-x: auto;
+}
+
+/* Responsive Table Wrapper for Resources */
+.resources-list {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Always keep SOS and Missing tables wide, allow horizontal scroll on small screens */
+.sos-list,
+.missing-list {
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+.sos-table,
+.missing-table {
+    min-width: 900px;
+    width: max-content;
+    /* Prevent table from shrinking on small screens */
 }
 
 /* Responsive for Team Table */
@@ -525,6 +572,38 @@ html, body {
     }
 }
 
+/* Responsive for Resources Table */
+@media (max-width: 800px) {
+    .resources-table {
+        font-size: 15px;
+        min-width: 700px;
+    }
+    .resources-table th, .resources-table td {
+        padding: 10px 8px;
+        max-width: 180px;
+    }
+}
+@media (max-width: 600px) {
+    .resources-table {
+        font-size: 14px;
+        min-width: 700px;
+    }
+    .resources-table th, .resources-table td {
+        padding: 9px 6px;
+        max-width: 140px;
+    }
+}
+@media (max-width: 480px) {
+    .resources-table {
+        min-width: 700px;
+    }
+    .resources-table th, .resources-table td {
+        font-size: 13px;
+        padding: 8px 4px;
+        max-width: 100px;
+    }
+}
+
 /* Optional: Make modal content fit small screens */
 @media (max-width: 500px) {
     .volunteer-modal-content {
@@ -543,5 +622,212 @@ html, body {
     .admin-volunteer-section {
         padding-left: 0.2em;
         padding-right: 0.2em;
+    }
+}
+
+/* Responsive: Section Spacing and Layout */
+@media (max-width: 900px) {
+    .admin-sos-section,
+    .admin-missing-section,
+    .admin-volunteer-section,
+    .admin-team-section,
+    .admin-resources-section {
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+        margin-bottom: 1.5em;
+    }
+}
+
+/* Responsive: Section Headings */
+@media (max-width: 700px) {
+    .admin-sos-section h2,
+    .admin-missing-section h2,
+    .admin-volunteer-section h2,
+    .admin-team-section h2,
+    .admin-resources-section h2 {
+        font-size: 1.2em;
+        margin-bottom: 0.7em;
+    }
+}
+
+/* Responsive: Add Resource Form */
+#addResourceForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+#addResourceForm > div {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.7em;
+    display: flex;
+}
+#addResourceForm input,
+#addResourceForm select,
+#addResourceForm button {
+    font-size: 1em;
+    box-sizing: border-box;
+}
+@media (max-width: 700px) {
+    #addResourceForm > div {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+    #addResourceForm input,
+    #addResourceForm select,
+    #addResourceForm button {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+}
+
+/* Responsive: Table Wrappers */
+.sos-list,
+.missing-list,
+.volunteer-list,
+.team-list,
+.resources-list {
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+/* Responsive: Table Font and Padding */
+@media (max-width: 600px) {
+    .volunteer-table,
+    .team-table,
+    .resources-table {
+        font-size: 13px;
+        min-width: 600px;
+    }
+    .volunteer-table th, .volunteer-table td,
+    .team-table th, .team-table td,
+    .resources-table th, .resources-table td {
+        padding: 7px 4px;
+        max-width: 100px;
+    }
+    /* Do NOT change .sos-table or .missing-table font-size or min-width here */
+}
+
+/* Responsive: Modal Content */
+@media (max-width: 500px) {
+    .volunteer-modal-content {
+        padding: 0.7em 0.2em 0.7em 0.2em;
+        max-width: 99vw;
+    }
+    #volunteerDetailContent {
+        font-size: 0.95em;
+    }
+}
+
+/* Responsive: Hide scrollbars for table wrappers on mobile */
+@media (max-width: 600px) {
+    .sos-list,
+    .missing-list,
+    .volunteer-list,
+    .team-list,
+    .resources-list {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+}
+
+/* Responsive: Footer font size */
+@media (max-width: 500px) {
+    .admin-footer-inner {
+        font-size: 0.95em;
+        padding-left: 0.2em;
+        padding-right: 0.2em;
+    }
+}
+
+/* Responsive: Reduce modal z-index on mobile if needed */
+@media (max-width: 500px) {
+    .volunteer-modal {
+        z-index: 1001;
+    }
+}
+
+/* Responsive: Reduce section padding on very small screens */
+@media (max-width: 400px) {
+    .admin-sos-section,
+    .admin-missing-section,
+    .admin-volunteer-section,
+    .admin-team-section,
+    .admin-resources-section {
+        padding-left: 0.05em;
+        padding-right: 0.05em;
+    }
+}
+
+/* Map Section Styles */
+.admin-map-section {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+#map {
+    width: 100%;
+    height: 350px;
+    border-radius: 0.7em;
+    margin-bottom: 1em;
+    min-height: 220px;
+}
+.locations-list {
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+@media (max-width: 700px) {
+    #map {
+        height: 220px;
+    }
+    .admin-map-section h2 {
+        font-size: 1.1em;
+    }
+    .locations-list table {
+        font-size: 13px;
+        min-width: 600px;
+    }
+}
+
+/* NGO Section Styles */
+.admin-ngo-section {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+.ngo-list {
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+@media (max-width: 700px) {
+    .admin-ngo-section h2 {
+        font-size: 1.1em;
+    }
+    .ngo-list table {
+        font-size: 13px;
+        min-width: 600px;
+    }
+}
+
+/* Donation Section Styles */
+.admin-donation-section {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+.donation-list {
+    width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+@media (max-width: 700px) {
+    .admin-donation-section h2 {
+        font-size: 1.1em;
+    }
+    .donation-list table {
+        font-size: 13px;
+        min-width: 600px;
     }
 }

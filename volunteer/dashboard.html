@@ -6,6 +6,7 @@
   <title>Volunteer Dashboard | ReliefNet</title>
   <link rel="stylesheet" href="volunteer.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
   <header class="header alt-header">
@@ -94,14 +95,6 @@
       <ul id="upcomingTasksList" class="upcoming-tasks-list"></ul>
     </section>
 
-    <!-- Map Section -->
-    <section class="map-section">
-      <h2>Assigned Locations Map</h2>
-      <div id="mapPlaceholder" class="map-placeholder">
-        <span><i class="fa fa-map-marker"></i> Map will display assigned locations and relief points here.</span>
-      </div>
-    </section>
-
     <!-- Resource Request Form -->
     <section class="resource-request-section">
       <h2>Request Additional Resources</h2>
@@ -121,6 +114,17 @@
         <button type="submit" class="btn btn-primary">Submit Request</button>
       </form>
       <div id="resourceRequestStatus" class="resource-request-status"></div>
+    </section>
+
+    <!-- Map Section: Nearby Shelters & Safe Zones -->
+    <section class="map-section">
+      <h2>Nearby Shelters & Safe Zones</h2>
+      <div class="map-filters" style="margin-bottom:1em;">
+        <button class="filter-btn active" data-type="shelter">Shelter</button>
+        <button class="filter-btn" data-type="medical">Medical Camp</button>
+        <button class="filter-btn" data-type="food">Food Center</button>
+      </div>
+      <div id="reliefMap" style="width:100%;height:320px;border-radius:1em;margin:1em 0;"></div>
     </section>
 
     <!-- Performance Tracker Section -->
@@ -163,10 +167,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database-compat.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="volunteer.js"></script>
 </body>
 </html>
-  
+
 
 
 
