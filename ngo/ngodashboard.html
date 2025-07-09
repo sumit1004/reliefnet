@@ -17,6 +17,8 @@
     <main class="ngo-main">
         <h2>Welcome to the NGO Dashboard</h2>
         <p>This is your dashboard. You can manage your NGO profile and view relief activities here.</p>
+        
+        <!-- Update Profile Button (top right) -->
         <button id="openProfileModalBtn" class="ngo-update-profile-btn">
             <i class="fa fa-user"></i> Update Profile
         </button>
@@ -53,7 +55,7 @@
                 </section>
             </div>
         </div>
-
+        <!-- End NGO Profile Modal Popup -->
 
     </main>
     <!-- SOS Reports Section -->
@@ -73,7 +75,7 @@
                 <option value="Medical">Medical</option>
                 <option value="Food">Food</option>
                 <option value="Rescue">Rescue</option>
-
+                <!-- Add more as needed -->
             </select>
             <button id="applySosFilters" class="ngo-update-btn" style="margin-left:8px;"><i class="fa fa-filter"></i> Filter</button>
         </div>
@@ -93,7 +95,7 @@
                     </tr>
                 </thead>
                 <tbody id="sosReportsTableBody">
-  
+                    <!-- Populated by JS -->
                 </tbody>
             </table>
         </div>
@@ -132,11 +134,11 @@
                     </tr>
                 </thead>
                 <tbody id="missingReportsTableBody">
+                    <!-- Populated by JS -->
                 </tbody>
             </table>
         </div>
     </section>
-
     <!-- Accepted Tasks Section -->
     <section class="ngo-reports-section">
         <h3>Accepted Tasks</h3>
@@ -160,17 +162,22 @@
         </div>
     </section>
 
+  
     <!-- Daily Briefing & Alerts Section -->
     <section class="ngo-reports-section" id="dailyBriefingSection">
         <h3>Daily Briefing &amp; Alerts</h3>
         <div id="dailyBriefingAlerts" class="ngo-daily-briefing">
             <div class="ngo-alerts">
                 <strong>Admin Updates:</strong>
-                <ul id="adminUpdatesList"> </ul>
+                <ul id="adminUpdatesList">
+                    <!-- Populated by JS -->
+                </ul>
             </div>
             <div class="ngo-task-priorities" style="margin-top:1.2em;">
                 <strong>Today's Priorities &amp; Urgent Focus:</strong>
-                <ul id="taskPrioritiesList">  </ul>
+                <ul id="taskPrioritiesList">
+                    <!-- Populated by JS -->
+                </ul>
             </div>
         </div>
     </section>
@@ -188,6 +195,7 @@
                     </tr>
                 </thead>
                 <tbody id="donationTableBody">
+                    <!-- Populated by JS -->
                 </tbody>
             </table>
         </div>

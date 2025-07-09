@@ -1,4 +1,4 @@
-
+// Helper to load Firebase scripts if not present
 function loadFirebaseScripts(callback) {
     const scripts = [
         "https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js",
@@ -23,6 +23,7 @@ function loadFirebaseScripts(callback) {
 }
 
 
+// NGO Firebase config for accepted tasks
 const ngoFirebaseConfig = {
     apiKey: "AIzaSyBB7xNTgCBvCm4UdEq4CwJLrdoDzjLfGXU",
     authDomain: "reliefnet-ngo.firebaseapp.com",
@@ -45,7 +46,9 @@ if (typeof firebase !== "undefined") {
 }
 
 function initFirebaseAndApp() {
+    // Initialize Firebase if not already initialized
     if (typeof firebase === "undefined") {
+        // Firebase SDK not loaded
         alert("Firebase SDK not loaded. Please include Firebase scripts before this file.");
     } else if (!firebase.apps.length) {
         firebase.initializeApp({
@@ -64,11 +67,13 @@ function initFirebaseAndApp() {
         const logoutBtn = document.getElementById('ngoLogoutBtn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', function() {
+                // Try to sign out from the NGO Firebase app if available, else just redirect
                 if (typeof firebase !== "undefined" && firebase.apps.length) {
                     let ngoApp = null;
                     try {
                         ngoApp = firebase.app("ngoApp");
                     } catch (e) {
+                        // fallback: try to find by name property
                         ngoApp = firebase.apps.find(app => app.name === "ngoApp");
                     }
                     if (ngoApp && ngoApp.auth) {
@@ -110,6 +115,7 @@ function initFirebaseAndApp() {
         // NGO Profile Section logic
         const ngoProfileForm = document.getElementById('ngoProfileForm');
         if (ngoProfileForm) {
+            // Dummy: Load profile data (replace with real fetch logic)
             const dummyProfile = {
                 ngoName: "Helping Hands Foundation",
                 ngoEmail: "contact@helpinghands.org",
@@ -125,6 +131,7 @@ function initFirebaseAndApp() {
 
             ngoProfileForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+                // Collect updated data
                 const updatedProfile = {
                     ngoName: document.getElementById('ngoName').value,
                     ngoEmail: document.getElementById('ngoEmail').value,
@@ -132,7 +139,7 @@ function initFirebaseAndApp() {
                     ngoRegNo: document.getElementById('ngoRegNo').value,
                     ngoLocation: document.getElementById('ngoLocation').value
                 };
-
+                // TODO: Save updatedProfile to backend
                 alert('Profile updated successfully!');
                 if (ngoProfileModal) ngoProfileModal.style.display = 'none';
             });
@@ -161,6 +168,7 @@ function initFirebaseAndApp() {
                 return;
             }
             data.forEach(report => {
+                // helpTypes as comma separated string
                 const helpTypes = Array.isArray(report.helpTypes)
                     ? report.helpTypes.filter(Boolean).join(", ")
                     : (report.helpTypes || "");
@@ -223,6 +231,7 @@ function initFirebaseAndApp() {
                         report.status = "Accepted";
                         renderSosReportsTable(sosReports);
                         alert(`You have accepted the SOS request: ${report.name}`);
+                        // Add to accepted tasks in NGO DB
                         addAcceptedTaskToNgoDb({
                             type: "SOS",
                             originalId: report.id,
@@ -308,6 +317,7 @@ function initFirebaseAndApp() {
                         report.status = "Accepted";
                         renderMissingReportsTable(missingReports);
                         alert(`You have accepted the missing person report: ${report.name}`);
+                        // Add to accepted tasks in NGO DB
                         addAcceptedTaskToNgoDb({
                             type: "Missing",
                             originalId: report.id,
@@ -324,9 +334,11 @@ function initFirebaseAndApp() {
             });
         }
 
-
+        // --- Accepted Tasks Section ---
         const acceptedTasksTableBody = document.getElementById('acceptedTasksTableBody');
         let acceptedTasks = [];
+
+        // Fetch accepted tasks from NGO DB
         function fetchAcceptedTasks() {
             if (ngoDb) {
                 ngoDb.ref('acceptedTasks').on('value', function(snapshot) {
@@ -337,13 +349,15 @@ function initFirebaseAndApp() {
             }
         }
 
+        // Add accepted task to NGO DB (avoid duplicates)
         function addAcceptedTaskToNgoDb(taskObj) {
             if (!ngoDb) return;
+            // Use a unique key based on type and originalId to avoid duplicates
             const uniqueKey = `${taskObj.type}_${taskObj.originalId}`;
             ngoDb.ref('acceptedTasks/' + uniqueKey).set(taskObj);
         }
 
-        // --- for SOS ---
+        // --- Accept logic for SOS ---
         if (sosReportsTableBody) {
             sosReportsTableBody.addEventListener('click', function(e) {
                 if (e.target.classList.contains('ngo-accept-btn')) {
@@ -372,7 +386,7 @@ function initFirebaseAndApp() {
             });
         }
 
-        // --- for Missing ---
+        // --- Accept logic for Missing ---
         if (missingReportsTableBody) {
             missingReportsTableBody.addEventListener('click', function(e) {
                 if (e.target.classList.contains('ngo-accept-btn')) {
@@ -401,7 +415,7 @@ function initFirebaseAndApp() {
             });
         }
 
-
+        // --- Render accepted tasks from NGO DB ---
         function renderAcceptedTasksTable() {
             if (!acceptedTasksTableBody) return;
             acceptedTasksTableBody.innerHTML = "";
@@ -430,7 +444,7 @@ function initFirebaseAndApp() {
             });
         }
 
-
+        // Status update for accepted tasks
         if (acceptedTasksTableBody) {
             acceptedTasksTableBody.addEventListener('change', function(e) {
                 if (e.target.classList.contains('ngo-status-select')) {
@@ -443,31 +457,44 @@ function initFirebaseAndApp() {
             });
         }
 
-
+        // Fetch accepted tasks on load
         fetchAcceptedTasks();
 
-
+        // --- SOS and Missing Reports fetching logic ---
+        // In fetchSosReports/fetchMissingReports, remove updateAcceptedTasksOnDataChange() and renderAcceptedTasksTable()
+        // Accepted tasks are now managed from the NGO DB only.
         function fetchSosReports() {
-            if (window.firebase && firebase.database) {
-                firebase.database().ref('sos').on('value', function(snapshot) {
-                    const data = snapshot.val() || {};
-                    sosReports = Object.keys(data).map(id => ({ id, ...data[id] }));
-                    renderSosReportsTable(sosReports);
-                });
+            // Use correct Firebase app for SOS (reliefnet-ca9c3)
+            let sosDb;
+            try {
+                sosDb = firebase.app("reportsApp").database();
+            } catch (e) {
+                sosDb = firebase.database();
             }
+            sosDb.ref('sos').on('value', function(snapshot) {
+                const data = snapshot.val() || {};
+                sosReports = Object.keys(data).map(id => ({ id, ...data[id] }));
+                renderSosReportsTable(sosReports);
+            });
         }
         function fetchMissingReports() {
-            if (window.firebase && firebase.database) {
-                firebase.database().ref('missing').on('value', function(snapshot) {
-                    const data = snapshot.val() || {};
-                    missingReports = Object.keys(data).map(id => ({ id, ...data[id] }));
-                    renderMissingReportsTable(missingReports);
-                });
+            // Use correct Firebase app for Missing (reliefnet-ca9c3)
+            let missingDb;
+            try {
+                missingDb = firebase.app("reportsApp").database();
+            } catch (e) {
+                missingDb = firebase.database();
             }
+            missingDb.ref('missing').on('value', function(snapshot) {
+                const data = snapshot.val() || {};
+                missingReports = Object.keys(data).map(id => ({ id, ...data[id] }));
+                renderMissingReportsTable(missingReports);
+            });
         }
         fetchSosReports();
         fetchMissingReports();
 
+        // Daily Briefing & Alerts (dummy data, replace with real fetch if needed)
         const adminUpdatesList = document.getElementById('adminUpdatesList');
         const taskPrioritiesList = document.getElementById('taskPrioritiesList');
         if (adminUpdatesList) {
@@ -485,8 +512,11 @@ function initFirebaseAndApp() {
             `;
         }
 
+        // --- Donation Tracking Section ---
+        // Dummy data for demonstration; replace with real fetch from backend/Firebase as needed
         const donationTableBody = document.getElementById('donationTableBody');
         const donationEmptyMsg = document.getElementById('donationEmptyMsg');
+        // Example: fetch from Firebase under 'donations/{ngoId}' if you have user auth
         const dummyDonations = [
             { donor: "Amit Sharma", amount: 5000, date: "2024-06-01", message: "Keep up the good work!" },
             { donor: "Priya Verma", amount: 2500, date: "2024-06-03", message: "" },
@@ -515,6 +545,7 @@ function initFirebaseAndApp() {
     });
 }
 
+// Check and load Firebase if needed
 if (typeof firebase === "undefined" || typeof firebase.database === "undefined") {
     loadFirebaseScripts(initFirebaseAndApp);
 } else {
