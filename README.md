@@ -30,6 +30,71 @@ Only selected users get access to the admin dashboard. Admin accounts are not op
 Donation System
 Anyone can donate through the website. Donors can choose to support a specific NGO or the overall admin-managed relief fund. The donation section shows all donation history clearly, including the name of the donor, the amount, the receiver (NGO or admin), and the date and time. This ensures complete transparency and trust
 
+Project Folder Structure
+``` 
+RELIEFNET/
+
+├── admin/
+│   ├── admin.css
+│   ├── admin.js
+│   └── dashboard.html
+│
+├── assets/
+│   ├── disaster.jpeg
+│   └── donation.jpg
+│
+├── css/
+│   └── home.css
+│
+├── js/
+│   ├── admin-auth.js
+│   ├── home.js
+│   ├── ngo-auth.js
+│   └── volunteer-firebase.js
+│
+├── ngo/
+│   ├── ngo.css
+│   ├── ngo.js
+│   └── ngodashboard.html
+│
+├── volunteer/
+│   ├── dashboard.html
+│   ├── volunteer.css
+│   └── volunteer.js
+│
+├── .gitattributes
+├── firebase-init.js
+├── Hackorbit-Psychic Coders.pptx
+├── home.html
+├── index.html
+├── README.md
+├── script.js
+└── style.css
+
+```
+
+Explanation
+admin/: Contains all files related to the admin dashboard, including HTML, CSS, and main admin JavaScript logic.
+
+
+assets/: Image files used throughout the website (like banners, illustrations).
+
+css/: General CSS files (currently used for home and landing pages).
+
+js/: JavaScript files for different sections like admin, home page, NGO, and volunteer authentication logic.
+
+ngo/: All files related to the NGO dashboard.
+
+volunteer/: All files for the volunteer dashboard.
+
+firebase-init.js: Configuration file for connecting the website to Firebase.
+
+index.html: Entry point or main page for GitHub Pages hosting.
+
+README.md: Complete project documentation.
+
+.gitattributes & pptx file: Project-level files for Git settings and hackathon presentation.
+
 
 Checkpoints Explanation
 Checkpoint 1: Landing Page (Completed at 1:00 PM)
