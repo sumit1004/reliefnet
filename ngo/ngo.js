@@ -1,3 +1,4 @@
+
 function loadFirebaseScripts(callback) {
     const scripts = [
         "https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js",
