@@ -92,6 +92,61 @@
         </div>
     </section>
 
+      <!-- Donation Section Start -->
+    <section class="donation" id="donation">
+        <div class="container">
+            <h2>Make a Donation</h2>
+            <p class="donation-desc">Help us reach more people in need. You can donate money or resources to a specific NGO or directly to ReliefNet Admin.</p>
+            <div class="donation-flex">
+                <div class="donation-info">
+                    <img src="assets/donation.jpg" alt="Donate" class="donation-illustration" />
+                    <ul class="donation-benefits">
+                        <li><i class="fa fa-check-circle"></i> 100% Transparent</li>
+                        <li><i class="fa fa-check-circle"></i> Direct to NGOs or Admin</li>
+                        <li><i class="fa fa-check-circle"></i> Secure & Quick</li>
+                    </ul>
+                </div>
+                <form id="donationForm" class="donation-form-ui">
+                    <div class="donation-row">
+                        <div class="donation-field">
+                            <label for="donationType">Type</label>
+                            <select id="donationType" required>
+                                <option value="">Select</option>
+                                <option value="Money">Money</option>
+                                <option value="Food">Food</option>
+                                <option value="Clothes">Clothes</option>
+                                <option value="Blankets">Blankets</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="donation-field">
+                            <label for="donationAmount">Amount / Qty</label>
+                            <input type="number" id="donationAmount" min="1" placeholder="Amount or quantity" required>
+                        </div>
+                    </div>
+                    <div class="donation-row">
+                        <div class="donation-field">
+                            <label for="donationTarget">Donate To</label>
+                            <select id="donationTarget" required>
+                                <option value="admin">ReliefNet Admin (Direct)</option>
+                            </select>
+                        </div>
+                        <div class="donation-field">
+                            <label for="donorContact">Contact (optional)</label>
+                            <input type="text" id="donorContact" placeholder="Phone or Email">
+                        </div>
+                    </div>
+                    <div class="donation-field">
+                        <label for="donationMessage">Message (optional)</label>
+                        <textarea id="donationMessage" rows="2" placeholder="Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary donation-btn">Donate Now</button>
+                    <div id="donationStatus" class="donation-status"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
 
     <section class="join" id="volunteers">
         <div class="container join-flex">
@@ -773,7 +828,7 @@
         }
     })();
 
-
+    // --- Join the Movement Button Logic ---
     document.addEventListener('DOMContentLoaded', function() {
         var joinNgoBtn = document.getElementById('joinNgoBtn');
         var joinVolunteerBtn = document.getElementById('joinVolunteerBtn');

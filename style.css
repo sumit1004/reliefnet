@@ -726,6 +726,148 @@ left: 35%;
 }
 
 
+/* Donation Section UI */
+.donation {
+    background: #f8fafb;
+    padding: 2.5rem 0 2rem 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+.donation h2 {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+.donation-desc {
+    text-align: center;
+    color: #444;
+    margin-bottom: 2em;
+    font-size: 1.08em;
+}
+.donation-flex {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.donation-info {
+    flex: 1 1 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 220px;
+    max-width: 320px;
+    margin-bottom: 1.5em;
+}
+.donation-illustration {
+    width: 224px;
+    margin-bottom: 1.2em;
+    opacity: 0.95;
+}
+.donation-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--primary);
+    font-size: 1.05em;
+}
+.donation-benefits li {
+    margin-bottom: 0.6em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.donation-benefits .fa {
+    color: #2b8a78;
+    font-size: 1.1em;
+}
+
+.donation-form-ui {
+    flex: 1 1 340px;
+    background: #fff;
+    border-radius: 1.1em;
+    box-shadow: 0 2px 16px rgba(44,130,201,0.07);
+    padding: 2em 1.5em 1.5em 1.5em;
+    max-width: 420px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+}
+.donation-row {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+.donation-field {
+    flex: 1 1 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+.donation-form-ui label {
+    font-weight: 600;
+    color: #2b8a78;
+    margin-bottom: 0.1em;
+}
+.donation-form-ui input,
+.donation-form-ui select,
+.donation-form-ui textarea {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.6em;
+    padding: 0.6em 0.9em;
+    font-size: 1em;
+    background: #f8fafb;
+    margin-bottom: 0.1em;
+    transition: border 0.18s;
+}
+.donation-form-ui input:focus,
+.donation-form-ui select:focus,
+.donation-form-ui textarea:focus {
+    border: 1.5px solid #2b8a78;
+    outline: none;
+}
+.donation-btn {
+    margin-top: 0.7em;
+    width: 100%;
+    font-size: 1.08em;
+    padding: 0.8em 0;
+    border-radius: 0.7em;
+}
+.donation-status {
+    margin-top: 0.7em;
+    color: #2563eb;
+    min-height: 1.2em;
+    font-size: 1em;
+    text-align: center;
+}
+
+/* Responsive Donation Section */
+@media (max-width: 900px) {
+    .donation-flex {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+    .donation-info, .donation-form-ui {
+        max-width: 100%;
+    }
+}
+@media (max-width: 600px) {
+    .donation-form-ui {
+        padding: 1.2em 0.5em 1em 0.5em;
+    }
+    .donation-illustration {
+        width: 80px;
+    }
+    .donation-row {
+        flex-direction: column;
+        gap: 0.5em;
+    }
+}
+
+
 /* Responsive styles */
 
 @media (max-width: 900px) {
