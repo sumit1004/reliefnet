@@ -124,6 +124,6 @@ In this checkpoint, I added the team management section to the admin dashboard. 
 Day 2, Checkpoint 3: NGO Dashboard
 In this checkpoint, I completed building the NGO dashboard and finished the authentication system for NGOs. I also added the SOS section, missing reports section, and the accepted tasks section. Now, NGOs can log in securely, view and manage SOS and missing reports, and track the tasks they have accepted. This makes it easier for NGOs to organize their work and respond quickly to the most urgent needs.
 
-Day 2, Checkpoint 3: All Dashboards Completed
+Day 2, Checkpoint 4: All Dashboards Completed
 In this checkpoint, I finished adding all the important sections to every dashboard, including the landing page, victim dashboard, volunteer dashboard, NGO dashboard, and admin dashboard. In the admin dashboard, I added the relief centers map feature, where the admin can create and locate food centers, shelters, and medical camps. These locations will also be visible to victims and volunteers so they can find help easily. The admin can also manage and add all resources directly from the dashboard. In the NGO dashboard, I added the donation section so NGOs can track and manage donations. I have completed and integrated all other important features across the dashboards, making the platform fully functional and ready for end-to-end use.
 
