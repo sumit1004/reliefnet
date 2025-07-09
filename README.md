@@ -121,3 +121,8 @@ Day 2, Checkpoint 2: Team Management Section
 In this checkpoint, I added the team management section to the admin dashboard. This new section allows the admin to view all teams, see team members' details, and manage or assign teams to specific tasks and locations. It helps the admin organize volunteers more effectively and makes overall coordination much easier.
 
 
+Day 2, Checkpoint 3: NGO Dashboard
+In this checkpoint, I completed building the NGO dashboard and finished the authentication system for NGOs. I also added the SOS section, missing reports section, and the accepted tasks section. Now, NGOs can log in securely, view and manage SOS and missing reports, and track the tasks they have accepted. This makes it easier for NGOs to organize their work and respond quickly to the most urgent needs.
+
+
+
