@@ -50,17 +50,20 @@ function initFirebaseAndApp() {
     if (typeof firebase === "undefined") {
         // Firebase SDK not loaded
         alert("Firebase SDK not loaded. Please include Firebase scripts before this file.");
-    } else if (!firebase.apps.length) {
-        firebase.initializeApp({
-            apiKey: "AIzaSyCtbphQnrs9-GRWU-rXV29ryfOo4nRwVOs",
-            authDomain: "reliefnet-ca9c3.firebaseapp.com",
-            databaseURL: "https://reliefnet-ca9c3-default-rtdb.firebaseio.com",
-            projectId: "reliefnet-ca9c3",
-            storageBucket: "reliefnet-ca9c3.firebasestorage.app",
-            messagingSenderId: "511314183423",
-            appId: "1:511314183423:web:d419ebe1a552b393b1f8ca",
-            measurementId: "G-G89QL5968J"
-        });
+    } else {
+        // Ensure reportsApp is initialized for SOS/Missing
+        if (!firebase.apps.some(app => app.name === "reportsApp")) {
+            firebase.initializeApp({
+                apiKey: "AIzaSyCtbphQnrs9-GRWU-rXV29ryfOo4nRwVOs",
+                authDomain: "reliefnet-ca9c3.firebaseapp.com",
+                databaseURL: "https://reliefnet-ca9c3-default-rtdb.firebaseio.com",
+                projectId: "reliefnet-ca9c3",
+                storageBucket: "reliefnet-ca9c3.firebasestorage.app",
+                messagingSenderId: "511314183423",
+                appId: "1:511314183423:web:d419ebe1a552b393b1f8ca",
+                measurementId: "G-G89QL5968J"
+            }, "reportsApp");
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -464,7 +467,6 @@ function initFirebaseAndApp() {
         // In fetchSosReports/fetchMissingReports, remove updateAcceptedTasksOnDataChange() and renderAcceptedTasksTable()
         // Accepted tasks are now managed from the NGO DB only.
         function fetchSosReports() {
-            // Use correct Firebase app for SOS (reliefnet-ca9c3)
             let sosDb;
             try {
                 sosDb = firebase.app("reportsApp").database();
@@ -478,7 +480,6 @@ function initFirebaseAndApp() {
             });
         }
         function fetchMissingReports() {
-            // Use correct Firebase app for Missing (reliefnet-ca9c3)
             let missingDb;
             try {
                 missingDb = firebase.app("reportsApp").database();

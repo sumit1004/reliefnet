@@ -459,7 +459,7 @@ loadUpcomingTasks();
     if (mapInitialized) return;
     const mapDiv = document.getElementById('reliefMap');
     if (!mapDiv) return;
-    map = L.map(mapDiv).setView([21.1938, 81.3509], 13);
+    map = L.map(mapDiv).setView([21.1938, 81.3509], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -468,7 +468,7 @@ loadUpcomingTasks();
   }
 
   function fetchCenters() {
-    reliefDb.ref('reliefCenters').on('value', snap => {
+    reliefDb.ref('reliefcenters').on('value', snap => {
       const data = snap.val();
       centersData = [];
       if (data) {
@@ -488,17 +488,17 @@ loadUpcomingTasks();
     let typeLabel = '';
     let iconUrl = '';
     if (type === 'shelter') {
-      typeLabel = 'Shelter';
+      typeLabel = 'shelter';
       iconUrl = "https://cdn-icons-png.flaticon.com/512/69/69524.png";
     } else if (type === 'medical') {
-      typeLabel = 'Medical Camp';
+      typeLabel = 'medical';
       iconUrl = "https://cdn-icons-png.flaticon.com/512/2965/2965567.png";
     } else if (type === 'food') {
-      typeLabel = 'Food Center';
+      typeLabel = 'food';
       iconUrl = "https://cdn-icons-png.flaticon.com/512/1046/1046784.png";
     }
     centersData.forEach(center => {
-      if (center.type && center.type.toLowerCase() === typeLabel.toLowerCase()) {
+      if (center.type && center.type.toLowerCase() === typeLabel) {
         const marker = L.marker([center.lat, center.lng], {
           icon: L.icon({
             iconUrl: iconUrl,
