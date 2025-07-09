@@ -36,7 +36,7 @@ if (ngoLoginForm) {
             .then(() => {
                 if (successDiv) successDiv.style.display = 'block';
                 setTimeout(() => {
-                    window.location.href = "ngo/ngoDashboard.html";
+                    window.location.href = "ngo/ngodashboard.html";
                 }, 1000);
             })
             .catch(err => {
@@ -75,7 +75,7 @@ if (ngoSignupForm) {
                 if (successDiv) successDiv.style.display = 'block';
                 ngoSignupForm.reset();
                 setTimeout(() => {
-                    window.location.href = "ngo/ngoDashboard.html";
+                    window.location.href = "ngo/ngodashboard.html";
                 }, 1000);
             })
             .catch(err => {
