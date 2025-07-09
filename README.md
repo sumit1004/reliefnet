@@ -116,3 +116,8 @@ In this checkpoint, I added the login form for the admin panel and completed the
 
 Day 2, Checkpoint 1: Admin Dashboard Data Integration
 In this checkpoint, I added all the necessary sections to the admin dashboard, including the SOS section, missing reports section, and volunteer management section. I also tested the database connections to make sure that all data is properly imported from Firebase to the admin dashboard. Everything is now working as expected, and the data displays correctly in each section, allowing the admin to easily monitor and manage reports and volunteers in real time.
+
+Day 2, Checkpoint 2: Team Management Section
+In this checkpoint, I added the team management section to the admin dashboard. This new section allows the admin to view all teams, see team members' details, and manage or assign teams to specific tasks and locations. It helps the admin organize volunteers more effectively and makes overall coordination much easier.
+
+
